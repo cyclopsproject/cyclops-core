@@ -1,0 +1,54 @@
+{
+  "name": "cyclops",
+  "version": "2.0.0-alpha.1",
+  "description": "The UX/UI Pattern Guide for the CenturyLink Platform",
+  "keywords": [
+    "css",
+    "framework",
+    "front-end",
+    "less",
+    "responsive",
+    "web"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "CenturyLink Cloud",
+  "contributors": [
+    {
+      "name": "Nathan Young",
+      "email": "mathan.young@ctl.io"
+    },
+    {
+      "name": "Matthew Osborn",
+      "email": "matthew.osborn@ctl.io"
+    },
+    {
+      "name": "Rathromony Ros"
+    },
+    {
+      "name": "Justin Mecham",
+      "email": "justin.mecham@ctl.io"
+    }
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "coffee-script": "^1.11.1",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-clean-css": "^2.0.13",
+    "gulp-coffee": "^2.3.2",
+    "gulp-concat": "^2.6.0",
+    "gulp-less": "^3.2.0",
+    "gulp-live-server": "0.0.30",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^2.2.0",
+    "gulp-svgmin": "^1.2.3",
+    "gulp-svgstore": "^6.1.0",
+    "gulp-uglify": "^2.0.0",
+    "jquery-ui": "^1.12.1",
+    "node-notifier": "^4.6.1",
+    "stream-combiner2": "^1.1.1"
+  }
+}
