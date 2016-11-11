@@ -34,6 +34,7 @@
   "license": "MIT",
   "devDependencies": {
     "coffee-script": "^1.11.1",
+    "del": "^2.2.2",
     "express-hbs": "^0.8.4",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.1",
