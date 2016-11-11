@@ -326,8 +326,8 @@ gulp.task 'clean-all-distributions', ->
 gulp.task 'create-distribution', [ 'clean-distribution', 'build' ], ->
 
   # Copy Build Output
-  gulp.src BUILD_OUTPUT
-    .pipe gulp.dest '#{DISTRIBUTION_OUTPUT}/#{pkg.version}'
+  gulp.src paths.build.base
+    .pipe gulp.dest("#{paths.distribution.base}/#{pkg.version}")
 
 # Default Gulp Task ------------------------------------------------------------
 
