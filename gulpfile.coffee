@@ -263,8 +263,8 @@ gulp.task 'serve', [ 'watch' ], ->
   server = liveServer.static(paths.build.website, options.liveServer.port)
   server.start()
 
-  # gulp.watch '#{BUILD_OUTPUT}/**/*.{css,js,png,svg}', (file) ->
-  #   server.notify.apply server, [ file ]
+  gulp.watch "#{paths.build.base}/**/*.{css,js,png,svg}", (file) ->
+    server.notify.apply server, [ file ]
 
 # Website Tasks ----------------------------------------------------------------
 
@@ -302,9 +302,11 @@ gulp.task 'compile-website', ->
           console.log err
     .pipe gulp.dest(paths.build.website)
 
-  # TODO: Remove this when we can update everything load from 'styles' instead of 'css'
+  # Symlink Styles and Scripts
   gulp.src paths.build.styles
-    .pipe symlink "#{paths.build.website}/css", force: true
+    .pipe symlink("#{paths.build.website}/css", force: true)
+  gulp.src paths.build.scripts
+    .pipe symlink("#{paths.build.website}/scripts", force: true)
 
 gulp.task 'optimize-website', [ 'compile-website' ], ->
   # TODO: We probably don't need this.
