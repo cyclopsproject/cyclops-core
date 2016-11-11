@@ -329,5 +329,4 @@ gulp.task 'create-distribution', [ 'clean-distribution', 'build' ], ->
 
 # Default Gulp Task ------------------------------------------------------------
 
-# TODO: Consider making 'serve' the default task
-gulp.task 'default', [ 'build' ]
+gulp.task 'default', [ 'serve' ]
