@@ -255,12 +255,12 @@ gulp.task 'watch', [ 'compile' ], ->
   isWatching = true
 
   # Styles
-  gulp.watch "{#{paths.styles.core},#{paths.styles.vendor},#{paths.styles.website}}/**/*", [ 'compile-stylesheets' ]
+  gulp.watch "{#{paths.styles.core},#{paths.styles.vendor},#{paths.styles.website}}/**/*", [ 'compile-styles' ]
   gulp.watch "{#{paths.scripts.core},#{paths.scripts.vendor}}/**/*", [ 'compile-scripts' ]
   gulp.watch "{#{paths.assets.base}}/**/*", [ 'compile-assets' ]
 
 gulp.task 'serve', [ 'watch' ], ->
-  server = liveServer.static(paths.build.base, options.liveServer.port)
+  server = liveServer.static(paths.build.website, options.liveServer.port)
   server.start()
 
   # gulp.watch '#{BUILD_OUTPUT}/**/*.{css,js,png,svg}', (file) ->
@@ -278,7 +278,7 @@ gulp.task 'compile-website', ->
   hbs = require 'express-hbs'
   through = require 'through2'
 
-  gulp.src 'src/site/**/*.html'
+  gulp.src 'src/website/**/*.html'
     .pipe through.obj (file, enc, cb) ->
       render = hbs.create().express3
         viewsDir: "src/website"
@@ -300,14 +300,14 @@ gulp.task 'compile-website', ->
         else
           console.log 'failed to render #{file.path}'
           console.log err
-    .pipe gulp.dest paths.build.website
+    .pipe gulp.dest(paths.build.website)
 
   # TODO: Remove this when we can update everything load from 'styles' instead of 'css'
   gulp.src paths.build.styles
     .pipe symlink "#{paths.build.website}/css", force: true
 
 gulp.task 'optimize-website', [ 'compile-website' ], ->
-  # TODO: We may not need this.
+  # TODO: We probably don't need this.
 
 # Distribution Tasks -----------------------------------------------------------
 
