@@ -97,10 +97,12 @@ options =
 
 # Primary Tasks ----------------------------------------------------------------
 
+gulp.task 'default', [ 'serve' ]
+
 gulp.task 'clean', [
   'clean-assets', 'clean-scripts', 'clean-styles', 'clean-vendor',
   'clean-distribution', 'clean-website'
-] # , (cb) -> cb()
+]
 
 gulp.task 'compile', [
   'compile-assets', 'compile-scripts', 'compile-styles',
@@ -112,13 +114,11 @@ gulp.task 'optimize', [
   'optimize-vendor-scripts', 'optimize-website'
 ]
 
-gulp.task 'dev', [
-  'compile', 'watch', 'serve'
-]
-
 gulp.task 'dist', [
   'clean', 'distribute'
 ]
+
+gulp.task 'dev', [ 'serve' ]
 
 # Asset Tasks ------------------------------------------------------------------
 
@@ -305,6 +305,8 @@ gulp.task 'compile-website', ->
   # Symlink Styles and Scripts
   gulp.src paths.build.styles
     .pipe symlink("#{paths.build.website}/css", force: true)
+  gulp.src paths.build.styles
+    .pipe symlink("#{paths.build.website}/styles", force: true)
   gulp.src paths.build.scripts
     .pipe symlink("#{paths.build.website}/scripts", force: true)
 
@@ -316,10 +318,10 @@ gulp.task 'optimize-website', [ 'compile-website' ], ->
 gulp.task 'distribute', [ 'clean-distribution', 'create-distribution' ]
 
 gulp.task 'clean-distribution', ->
-  del.sync "#{paths.distribution}/#{pkg.version}"
+  del.sync "#{paths.distribution.base}/#{pkg.version}"
 
 gulp.task 'clean-all-distributions', ->
-  del.sync paths.distribution
+  del.sync paths.distribution.base
 
 # TODO: Make this do the optimization
 gulp.task 'create-distribution', [ 'clean-distribution', 'build' ], ->
@@ -327,7 +329,3 @@ gulp.task 'create-distribution', [ 'clean-distribution', 'build' ], ->
   # Copy Build Output
   gulp.src paths.build.base
     .pipe gulp.dest("#{paths.distribution.base}/#{pkg.version}")
-
-# Default Gulp Task ------------------------------------------------------------
-
-gulp.task 'default', [ 'serve' ]
