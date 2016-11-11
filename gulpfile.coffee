@@ -322,7 +322,6 @@ gulp.task 'clean-all-distributions', ->
   del.sync paths.distribution
 
 # TODO: Make this do the optimization
-# TODO: Format the dist folder as dist/version/...
 gulp.task 'create-distribution', [ 'clean-distribution', 'build' ], ->
 
   # Copy Build Output
