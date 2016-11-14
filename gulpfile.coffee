@@ -25,23 +25,11 @@
 
 # Dependencies -----------------------------------------------------------------
 
-autoprefixer = require 'gulp-autoprefixer'
-cleanCSS = require 'gulp-clean-css'
-coffee = require 'gulp-coffee'
-concat = require 'gulp-concat'
 del = require 'del'
 gulp = require 'gulp'
-less = require 'gulp-less'
-liveServer = require 'gulp-live-server'
 notifier = require 'node-notifier'
 pkg = require './package.json'
-plumber = require 'gulp-plumber'
-rename = require 'gulp-rename'
-sourcemaps = require 'gulp-sourcemaps'
-svgmin = require 'gulp-svgmin'
-svgstore = require 'gulp-svgstore'
-symlink = require 'gulp-symlink' # TODO: We don't need this in Gulp 4
-uglify = require 'gulp-uglify'
+plugins = require('gulp-load-plugins')()
 
 # Configuration ----------------------------------------------------------------
 
@@ -95,185 +83,151 @@ options =
       else
         throw error
 
-# Primary Tasks ----------------------------------------------------------------
+# Assets -----------------------------------------------------------------------
 
-gulp.task 'default', [ 'serve' ]
+cleanAssets = ->
+  del paths.build.assets
 
-gulp.task 'clean', [
-  'clean-assets', 'clean-scripts', 'clean-styles', 'clean-vendor',
-  'clean-distribution', 'clean-website'
-]
-
-gulp.task 'compile', [
-  'compile-assets', 'compile-scripts', 'compile-styles',
-  'compile-vendor-scripts', 'compile-website'
-]
-
-gulp.task 'optimize', [
-  'optimize-assets', 'optimize-scripts', 'optimize-styles',
-  'optimize-vendor-scripts', 'optimize-website'
-]
-
-gulp.task 'dist', [
-  'clean', 'distribute'
-]
-
-gulp.task 'dev', [ 'serve' ]
-
-# Asset Tasks ------------------------------------------------------------------
-
-gulp.task 'assets', [ 'clean-assets', 'compile-assets', 'optimize-assets' ]
-
-gulp.task 'clean-assets', ->
-  del.sync paths.build.assets
-
-gulp.task 'compile-assets', ->
+compileAssets = ->
 
   # SVG Icons
   gulp.src "#{paths.assets.icons}/**/*.svg"
-    .pipe rename(prefix: 'icon-')
-    .pipe svgstore(inlineSvg: true)
-    .pipe rename('cyclops.icons.svg')
+    .pipe plugins.rename(prefix: 'icon-')
+    .pipe plugins.svgstore(inlineSvg: true)
+    .pipe plugins.rename('cyclops.icons.svg')
     .pipe gulp.dest(paths.build.icons)
 
-gulp.task 'optimize-assets', [ 'compile-assets' ], ->
+optimizeAssets = ->
 
   # TODO: pngcrush, etc?
 
   # SVG Icons
   gulp.src "#{paths.assets.icons}/**/*.svg"
-    .pipe rename(prefix: 'icon-')
-    .pipe svgmin()
-    .pipe svgstore(inlineSvg: true)
-    .pipe rename('cyclops.icons.min.svg')
+    .pipe plugins.rename(prefix: 'icon-')
+    .pipe plugins.svgmin()
+    .pipe plugins.svgstore(inlineSvg: true)
+    .pipe plugins.rename('cyclops.icons.min.svg')
     .pipe gulp.dest(paths.build.icons)
 
-# Script Tasks -----------------------------------------------------------------
+# Scripts ----------------------------------------------------------------------
 
-gulp.task 'scripts', [ 'clean-scripts', 'compile-scripts', 'optimize-scripts' ]
+cleanScripts = ->
+  del paths.build.scripts
 
-gulp.task 'clean-scripts', ->
-  del.sync paths.build.scripts
-
-gulp.task 'compile-scripts', ->
+compileScripts = ->
 
   # CoffeeScript Files
   gulp.src "#{paths.scripts.core}/**/*.coffee"
-    .pipe plumber(options.plumber)
-    .pipe coffee()
-    .pipe sourcemaps.init()
-    .pipe concat('cyclops.js')
-    .pipe sourcemaps.write('.')
+    .pipe plugins.plumber(options.plumber)
+    .pipe plugins.coffee()
+    .pipe plugins.sourcemaps.init()
+    .pipe plugins.concat('cyclops.js')
+    .pipe plugins.sourcemaps.write('.')
     .pipe gulp.dest(paths.build.scripts)
 
   # TODO: ES6 via Babel
 
-gulp.task 'optimize-scripts', [ 'compile-scripts' ], ->
+optimizeScripts = ->
   gulp.src "#{paths.build.scripts}/cyclops.js"
-    .pipe plumber(options.plumber)
-    .pipe sourcemaps.init()
-    .pipe uglify()
-    .pipe rename(suffix: '.min')
-    .pipe sourcemaps.write('.')
+    .pipe plugins.plumber(options.plumber)
+    .pipe plugins.sourcemaps.init()
+    .pipe plugins.uglify()
+    .pipe plugins.rename(suffix: '.min')
+    .pipe plugins.sourcemaps.write('.')
     .pipe gulp.dest(paths.build.scripts)
 
-# Stylesheet Tasks -------------------------------------------------------------
+# Stylesheets ------------------------------------------------------------------
 
-gulp.task 'styles', [ 'clean-styles', 'compile-styles', 'optimize-styles' ]
+cleanStyles = ->
+  del paths.build.styles
 
-gulp.task 'clean-styles', ->
-  del.sync paths.build.styles
-
-gulp.task 'compile-styles', ->
+compileStyles = ->
   gulp.src [ "#{paths.styles.core}/cyclops.less", "#{paths.styles.website}/site.less" ]
-    .pipe plumber(options.plumber)
-    .pipe sourcemaps.init()
-    .pipe less(options.less)
-    .pipe autoprefixer(options.autoprefixer)
-    .pipe sourcemaps.write('.')
+    .pipe plugins.plumber(options.plumber)
+    .pipe plugins.sourcemaps.init()
+    .pipe plugins.less(options.less)
+    .pipe plugins.autoprefixer(options.autoprefixer)
+    .pipe plugins.sourcemaps.write('.')
     .pipe gulp.dest(paths.build.styles)
 
-gulp.task 'optimize-styles', [ 'compile-styles' ], ->
+optimizeStyles = ->
   gulp.src [ "#{paths.build.styles}/**/*.css", "!#{paths.build.styles}/**/*.css" ]
-    .pipe sourcemaps.init()
-    .pipe cleanCSS()
-    .pipe rename(suffix: '.min')
-    .pipe sourcemaps.write('.')
+    .pipe plugins.sourcemaps.init()
+    .pipe plugins.cleanCss()
+    .pipe plugins.rename(suffix: '.min')
+    .pipe plugins.sourcemaps.write('.')
     .pipe gulp.dest(paths.build.styles)
 
-# Vendor Tasks -----------------------------------------------------------------
+# Vendor Dependencies ----------------------------------------------------------
 
-gulp.task 'vendor', [
-  'clean-vendor', 'compile-vendor-scripts', 'optimize-vendor-scripts',
-  'compile-vendor-styles', 'optimize-vendor-styles'
-]
+cleanVendor = ->
+  del [ paths.scripts.vendor, paths.styles.vendor ]
 
-gulp.task 'clean-vendor', ->
-  del.sync [ paths.scripts.vendor, paths.styles.vendor ]
-
-gulp.task 'compile-vendor-scripts', ->
+compileVendorScripts = ->
 
   # Copy Vendor Scripts
   gulp.src "#{paths.scripts.vendor}/**/*.js"
-    .pipe sourcemaps.init()
-    .pipe sourcemaps.write('.')
+    .pipe plugins.sourcemaps.init()
+    .pipe plugins.sourcemaps.write('.')
     .pipe gulp.dest("#{paths.build.scripts}/vendor")
 
   # Compile and Copy Vendor CoffeeScripts
   gulp.src "#{paths.scripts.vendor}/**/*.coffee"
-    .pipe plumber(options.plumber)
-    .pipe coffee()
-    .pipe sourcemaps.init()
-    .pipe sourcemaps.write('.')
+    .pipe plugins.plumber(options.plumber)
+    .pipe plugins.coffee()
+    .pipe plugins.sourcemaps.init()
+    .pipe plugins.sourcemaps.write('.')
     .pipe gulp.dest("#{paths.build.scripts}/vendor")
 
   # Copy Widget Factory from jQuery UI
   gulp.src 'node_modules/jquery-ui/ui/widget.js'
-    .pipe sourcemaps.init()
-    .pipe rename('jquery.widget.js')
-    .pipe sourcemaps.write('.')
+    .pipe plugins.sourcemaps.init()
+    .pipe plugins.rename('jquery.widget.js')
+    .pipe plugins.sourcemaps.write('.')
     .pipe gulp.dest("#{paths.build.scripts}/vendor")
 
-gulp.task 'optimize-vendor-scripts', [ 'compile-vendor-scripts' ], ->
+optimizeVendorScripts = ->
   gulp.src [ "#{paths.build.scripts}/vendor/**/*.js", "!#{paths.build.scripts}/vendor/**/*.min.js" ]
-    .pipe sourcemaps.init()
-    .pipe uglify()
-    .pipe rename(suffix: '.min')
-    .pipe sourcemaps.write('.')
+    .pipe plugins.sourcemaps.init()
+    .pipe plugins.uglify()
+    .pipe plugins.rename(suffix: '.min')
+    .pipe plugins.sourcemaps.write('.')
     .pipe gulp.dest("#{paths.build.scripts}/vendor")
 
-gulp.task 'compile-vendor-styles', ->
+compileVendorStyles = ->
   # TODO: Implement
 
-gulp.task 'optimize-vendor-styles', [ 'compile-vendor-styles' ], ->
+optimizeVendorStyles = ->
   # TODO: Implement
 
-# Development Tasks ------------------------------------------------------------
+gulp.task 'vendor',
+  gulp.series(
+    cleanVendor
+    gulp.parallel(compileVendorScripts) # , compileVendorStyles)
+    gulp.parallel(optimizeVendorScripts) # , optimizeVendorStyles)
+  )
 
-gulp.task 'watch', [ 'compile' ], ->
+# Development Workflow ---------------------------------------------------------
 
+watch = ->
   isWatching = true
+  gulp.watch "{#{paths.styles.core},#{paths.styles.vendor},#{paths.styles.website}}/**/*", gulp.series(compileStyles)
+  gulp.watch "{#{paths.scripts.core},#{paths.scripts.vendor}}/**/*", gulp.series(compileScripts)
+  gulp.watch "{#{paths.assets.base}}/**/*", gulp.series(compileAssets)
 
-  # Styles
-  gulp.watch "{#{paths.styles.core},#{paths.styles.vendor},#{paths.styles.website}}/**/*", [ 'compile-styles' ]
-  gulp.watch "{#{paths.scripts.core},#{paths.scripts.vendor}}/**/*", [ 'compile-scripts' ]
-  gulp.watch "{#{paths.assets.base}}/**/*", [ 'compile-assets' ]
-
-gulp.task 'serve', [ 'watch' ], ->
+serve = ->
   server = liveServer.static(paths.build.website, options.liveServer.port)
   server.start()
 
   gulp.watch "#{paths.build.base}/**/*.{css,js,png,svg}", (file) ->
     server.notify.apply server, [ file ]
 
-# Website Tasks ----------------------------------------------------------------
+# Website ----------------------------------------------------------------------
 
-gulp.task 'website', [ 'clean-website', 'compile-website', 'optimize-website' ]
+cleanWebsite = ->
+  del paths.build.website
 
-gulp.task 'clean-website', ->
-  del.sync paths.build.website
-
-gulp.task 'compile-website', ->
+compileWebsite = ->
   # TODO: Replace with a more modern hbs compiler setup
   hbs = require 'express-hbs'
   through = require 'through2'
@@ -304,28 +258,51 @@ gulp.task 'compile-website', ->
 
   # Symlink Styles and Scripts
   gulp.src paths.build.styles
-    .pipe symlink("#{paths.build.website}/css", force: true)
+    .pipe gulp.symlink("#{paths.build.website}/css", force: true)
   gulp.src paths.build.styles
-    .pipe symlink("#{paths.build.website}/styles", force: true)
+    .pipe gulp.symlink("#{paths.build.website}/styles", force: true)
   gulp.src paths.build.scripts
-    .pipe symlink("#{paths.build.website}/scripts", force: true)
+    .pipe gulp.symlink("#{paths.build.website}/scripts", force: true)
 
-gulp.task 'optimize-website', [ 'compile-website' ], ->
-  # TODO: We probably don't need this.
+# Distribution -----------------------------------------------------------------
 
-# Distribution Tasks -----------------------------------------------------------
+cleanDistribution = ->
+  del "#{paths.distribution.base}/#{pkg.version}"
 
-gulp.task 'distribute', [ 'clean-distribution', 'create-distribution' ]
-
-gulp.task 'clean-distribution', ->
-  del.sync "#{paths.distribution.base}/#{pkg.version}"
-
-gulp.task 'clean-all-distributions', ->
-  del.sync paths.distribution.base
+cleanAllDistributions = ->
+  del paths.distribution.base
 
 # TODO: Make this do the optimization
-gulp.task 'create-distribution', [ 'clean-distribution', 'build' ], ->
+createDistribution = ->
 
   # Copy Build Output
   gulp.src paths.build.base
     .pipe gulp.dest("#{paths.distribution.base}/#{pkg.version}")
+
+# Tasks ------------------------------------------------------------------------
+
+gulp.task 'clean', gulp.series(cleanAssets, cleanScripts, cleanStyles, cleanVendor, cleanWebsite)
+
+gulp.task 'compile', gulp.series('clean', gulp.parallel(compileAssets, compileScripts, compileStyles), compileWebsite)
+
+gulp.task 'optimize', gulp.series('compile', gulp.parallel(optimizeAssets, optimizeScripts, optimizeStyles, optimizeVendorScripts))
+
+gulp.task 'dist', gulp.series('optimize', cleanDistribution, createDistribution)
+
+gulp.task 'assets', gulp.series(cleanAssets, compileAssets, optimizeAssets)
+
+gulp.task 'scripts', gulp.series(cleanScripts, compileScripts, optimizeScripts)
+
+gulp.task 'styles', gulp.series(cleanStyles, compileStyles, optimizeStyles)
+
+gulp.task 'watch', gulp.series('compile', watch)
+
+gulp.task 'serve', gulp.series('watch', serve)
+
+gulp.task 'website', gulp.series(cleanWebsite, compileWebsite)
+
+gulp.task 'distribute', gulp.series(cleanDistribution, createDistribution)
+
+gulp.task 'dev', gulp.series('serve')
+
+gulp.task 'default', gulp.series('serve')
