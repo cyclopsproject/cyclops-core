@@ -216,7 +216,7 @@ watch = ->
   gulp.watch "{#{paths.assets.base}}/**/*", gulp.series(compileAssets)
 
 serve = ->
-  server = liveServer.static(paths.build.website, options.liveServer.port)
+  server = plugins.liveServer.static(paths.build.website, options.liveServer.port)
   server.start()
 
   gulp.watch "#{paths.build.base}/**/*.{css,js,png,svg}", (file) ->
@@ -258,11 +258,11 @@ compileWebsite = ->
 
   # Symlink Styles and Scripts
   gulp.src paths.build.styles
-    .pipe gulp.symlink("#{paths.build.website}/css", force: true)
+    .pipe plugins.symlink("#{paths.build.website}/css", force: true)
   gulp.src paths.build.styles
-    .pipe gulp.symlink("#{paths.build.website}/styles", force: true)
+    .pipe plugins.symlink("#{paths.build.website}/styles", force: true)
   gulp.src paths.build.scripts
-    .pipe gulp.symlink("#{paths.build.website}/scripts", force: true)
+    .pipe plugins.symlink("#{paths.build.website}/scripts", force: true)
 
 # Distribution -----------------------------------------------------------------
 
@@ -297,7 +297,7 @@ gulp.task 'styles', gulp.series(cleanStyles, compileStyles, optimizeStyles)
 
 gulp.task 'watch', gulp.series('compile', watch)
 
-gulp.task 'serve', gulp.series('watch', serve)
+gulp.task 'serve', gulp.parallel('watch', serve)
 
 gulp.task 'website', gulp.series(cleanWebsite, compileWebsite)
 
