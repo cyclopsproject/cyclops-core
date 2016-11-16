@@ -28,6 +28,9 @@
 del = require 'del'
 gulp = require 'gulp'
 notifier = require 'node-notifier'
+streamqueue = require 'streamqueue'
+es = require 'event-stream'
+through = require 'through2'
 pkg = require './package.json'
 plugins = require('gulp-load-plugins')()
 
@@ -37,6 +40,7 @@ isWatching = false
 
 paths =
   scripts:
+    build: 'src/build'
     core: 'src/scripts'
     vendor: 'vendor/scripts'
     website: 'src/website/styles'
@@ -83,31 +87,24 @@ options =
       else
         throw error
 
+
+# Helpers ----------------------------------------------------------------------
+
+appendStream = () ->
+  pass = through.obj()
+  return es.duplex(pass, streamqueue({ objectMode: true }, pass, arguments[0]))
+
 # Assets -----------------------------------------------------------------------
 
 cleanAssets = ->
   del paths.build.assets
 
 compileAssets = ->
-
-  # SVG Icons
-  gulp.src "#{paths.assets.icons}/**/*.svg"
-    .pipe plugins.rename(prefix: 'icon-')
-    .pipe plugins.svgstore(inlineSvg: true)
-    .pipe plugins.rename('cyclops.icons.svg')
-    .pipe gulp.dest(paths.build.icons)
+  return
 
 optimizeAssets = ->
-
-  # TODO: pngcrush, etc?
-
-  # SVG Icons
-  gulp.src "#{paths.assets.icons}/**/*.svg"
-    .pipe plugins.rename(prefix: 'icon-')
-    .pipe plugins.svgmin()
-    .pipe plugins.svgstore(inlineSvg: true)
-    .pipe plugins.rename('cyclops.icons.min.svg')
-    .pipe gulp.dest(paths.build.icons)
+  # TODO: pngcrush,etc?
+  return
 
 # Scripts ----------------------------------------------------------------------
 
@@ -115,11 +112,26 @@ cleanScripts = ->
   del paths.build.scripts
 
 compileScripts = ->
+# inline icons SVGs
+  svgs = gulp.src "#{paths.assets.icons}/**/*.svg"
+    .pipe plugins.rename(prefix: 'icon-')
+    .pipe plugins.svgmin()
+    .pipe plugins.svgstore(inlineSvg: true)
+
+  afterFile = gulp.src "#{paths.scripts.build}/after.js"
+    .pipe plugins.inject(svgs, {
+        name: 'icons',
+        transform: (filePath, file) ->
+          return file.contents.toString().replace(/"/g, '\\"')
+       })
+
 
   # CoffeeScript Files
   gulp.src "#{paths.scripts.core}/**/*.coffee"
     .pipe plugins.plumber(options.plumber)
-    .pipe plugins.coffee()
+    .pipe plugins.coffee({bare: true})
+    .pipe plugins.addSrc.prepend "#{paths.scripts.build}/before.js"
+    .pipe appendStream afterFile
     .pipe plugins.sourcemaps.init()
     .pipe plugins.concat('cyclops.js')
     .pipe plugins.sourcemaps.write('.')
@@ -283,13 +295,16 @@ createDistribution = ->
 
 gulp.task 'clean', gulp.series(cleanAssets, cleanScripts, cleanStyles, cleanVendor, cleanWebsite)
 
-gulp.task 'compile', gulp.series('clean', gulp.parallel(compileAssets, compileScripts, compileStyles), compileWebsite)
+# gulp.task 'compile', gulp.series('clean', gulp.parallel(compileAssets, compileScripts, compileStyles), compileWebsite)
+gulp.task 'compile', gulp.series('clean', gulp.parallel(compileScripts, compileStyles), compileWebsite)
 
-gulp.task 'optimize', gulp.series('compile', gulp.parallel(optimizeAssets, optimizeScripts, optimizeStyles, optimizeVendorScripts))
+# gulp.task 'optimize', gulp.series('compile', gulp.parallel(optimizeAssets, optimizeScripts, optimizeStyles, optimizeVendorScripts))
+gulp.task 'optimize', gulp.series('compile', gulp.parallel(optimizeScripts, optimizeStyles, optimizeVendorScripts))
 
 gulp.task 'dist', gulp.series('optimize', cleanDistribution, createDistribution)
 
-gulp.task 'assets', gulp.series(cleanAssets, compileAssets, optimizeAssets)
+# gulp.task 'assets', gulp.series(cleanAssets, compileAssets, optimizeAssets)
+gulp.task 'assets', gulp.series(cleanAssets)
 
 gulp.task 'scripts', gulp.series(cleanScripts, compileScripts, optimizeScripts)
 
