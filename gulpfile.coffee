@@ -70,7 +70,7 @@ options =
       "#{__dirname}/#{paths.styles.website}"
     ]
   liveServer:
-    port: process.env.PORT or 4000
+    port: process.env.PORT or 4300
   plumber:
     errorHandler: (error) ->
       if isWatching
