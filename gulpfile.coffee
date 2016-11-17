@@ -53,6 +53,10 @@ paths =
     fonts: 'src/assets/fonts'
     icons: 'src/assets/images/icons'
     images: 'src/assets/images'
+  website:
+    base: 'src/website'
+    partials: 'src/website/partials'
+    layouts: 'src/website/layouts'
   build:
     base: 'build'
     assets: 'build/assets'
@@ -244,17 +248,17 @@ compileWebsite = ->
   hbs = require 'express-hbs'
   through = require 'through2'
 
-  gulp.src 'src/website/**/*.html'
+  gulp.src "#{paths.website.base}/**/*.html"
     .pipe through.obj (file, enc, cb) ->
       render = hbs.create().express3
-        viewsDir: "src/website"
-        partialsDir: 'src/website/partials'
-        layoutDir: 'src/website/layouts'
-        defaultLayout: 'src/website/layouts/default.html'
+        viewsDir: paths.website.base
+        partialsDir: paths.website.partials
+        layoutDir: paths.website.layouts
+        defaultLayout: "#{paths.website.layouts}/default.html"
         extName: 'html'
       locals = {
         settings: {
-          views: 'src/website'
+          views: paths.website.base
         },
         version: pkg.version
       }
