@@ -234,12 +234,13 @@ watch = ->
   gulp.watch "{#{paths.styles.core},#{paths.styles.vendor},#{paths.styles.website}}/**/*", gulp.series(compileStyles)
   gulp.watch "{#{paths.scripts.core},#{paths.scripts.vendor}}/**/*", gulp.series(compileScripts)
   gulp.watch "{#{paths.assets.base}}/**/*", gulp.series(compileAssets)
+  gulp.watch "{#{paths.website.base}}/**/*", gulp.series(compileWebsite)
 
 serve = ->
   server = plugins.liveServer.static(paths.build.website, options.liveServer.port)
   server.start()
 
-  gulp.watch "#{paths.build.base}/**/*.{css,js,png,svg}", (file) ->
+  gulp.watch "#{paths.build.base}/**/*.{css,js,png,svg,html}", (file) ->
     server.notify.apply server, [ file ]
 
 # Website ----------------------------------------------------------------------
