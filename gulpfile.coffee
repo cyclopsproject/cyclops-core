@@ -57,6 +57,9 @@ paths =
     base: 'src/website'
     partials: 'src/website/partials'
     layouts: 'src/website/layouts'
+  tests:
+    base: 'spec'
+    helpers: 'spec/helpers'
   build:
     base: 'build'
     assets: 'build/assets'
@@ -65,6 +68,7 @@ paths =
     images: 'build/assets/images'
     icons: 'build/assets/images/icons'
     website: 'build/website'
+    tests: 'build/tests'
   distribution:
     base: 'dist'
 
@@ -295,9 +299,23 @@ createDistribution = ->
   gulp.src paths.build.base
     .pipe gulp.dest("#{paths.distribution.base}/#{pkg.version}")
 
+# Tests ------------------------------------------------------------------------
+
+cleanTests = ->
+  del paths.build.tests
+
+compileTests = ->
+  gulp.src "#{paths.tests.base}/**/*.coffee"
+    .pipe plugins.coffee(bare: true)
+    .pipe gulp.dest(paths.build.tests)
+
+runTests = ->
+  gulp.src "#{paths.build.tests}/**/*.spec.js"
+    .pipe plugins.jasmine()
+
 # Tasks ------------------------------------------------------------------------
 
-gulp.task 'clean', gulp.series(cleanAssets, cleanScripts, cleanStyles, cleanVendor, cleanWebsite)
+gulp.task 'clean', gulp.series(cleanAssets, cleanScripts, cleanStyles, cleanVendor, cleanWebsite, cleanTests)
 
 # gulp.task 'compile', gulp.series('clean', gulp.parallel(compileAssets, compileScripts, compileStyles), compileWebsite)
 gulp.task 'compile', gulp.series('clean', gulp.parallel(compileScripts, compileStyles), compileWebsite)
@@ -325,3 +343,5 @@ gulp.task 'distribute', gulp.series(cleanDistribution, createDistribution)
 gulp.task 'dev', gulp.series('serve')
 
 gulp.task 'default', gulp.series('serve')
+
+gulp.task 'test', gulp.series('compile', compileTests, runTests)
