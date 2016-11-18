@@ -11,8 +11,11 @@
     "web"
   ],
   "scripts": {
+    "compile": "gulp compile",
     "gulp": "./node_modules/gulp/bin/gulp.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "serve": "gulp serve",
+    "test": "gulp test",
+    "watch": "gulp watch"
   },
   "author": "CenturyLink Cloud",
   "contributors": [
