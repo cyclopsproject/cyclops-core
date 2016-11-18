@@ -120,7 +120,7 @@ cleanScripts = ->
   del paths.build.scripts
 
 compileScripts = ->
-# inline icons SVGs
+  # inline icons SVGs
   svgs = gulp.src "#{paths.assets.icons}/**/*.svg"
     .pipe plugins.rename(prefix: 'icon-')
     .pipe plugins.svgmin()
@@ -195,6 +195,12 @@ compileVendorScripts = ->
   gulp.src "#{paths.scripts.vendor}/**/*.coffee"
     .pipe plugins.plumber(options.plumber)
     .pipe plugins.coffee()
+    .pipe plugins.sourcemaps.init()
+    .pipe plugins.sourcemaps.write('.')
+    .pipe gulp.dest("#{paths.build.scripts}/vendor")
+
+  # Copy jQuery
+  gulp.src 'node_modules/jquery/dist/jquery.js'
     .pipe plugins.sourcemaps.init()
     .pipe plugins.sourcemaps.write('.')
     .pipe gulp.dest("#{paths.build.scripts}/vendor")
@@ -312,17 +318,28 @@ compileTests = ->
 
 runTests = ->
   gulp.src "#{paths.build.tests}/**/*.spec.js"
-    .pipe plugins.jasmine()
+    .pipe plugins.karmaRunner.server(
+      'singleRun': true
+      'frameworks': [ 'jasmine' ]
+      'browsers': [ 'PhantomJS' ] # 'Chrome' ] # , 'Safari', 'Firefox' ]
+      'reporters': [ 'progress' ] # 'kjhtml' ]
+      files: [
+        "#{paths.build.scripts}/vendor/**/*.js"
+        "#{paths.build.scripts}/cyclops.js"
+        "#{paths.build.tests}/**/*.spec.js"
+      ]
+    )
+
+runTestsInBrowser = ->
+  # TODO
 
 # Tasks ------------------------------------------------------------------------
 
 gulp.task 'clean', gulp.series(cleanAssets, cleanScripts, cleanStyles, cleanVendor, cleanWebsite, cleanTests)
 
-# gulp.task 'compile', gulp.series('clean', gulp.parallel(compileAssets, compileScripts, compileStyles), compileWebsite)
-gulp.task 'compile', gulp.series('clean', gulp.parallel(compileScripts, compileStyles), compileWebsite)
+gulp.task 'compile', gulp.series('clean', gulp.parallel(compileVendorScripts, compileScripts, compileStyles), compileWebsite)
 
-# gulp.task 'optimize', gulp.series('compile', gulp.parallel(optimizeAssets, optimizeScripts, optimizeStyles, optimizeVendorScripts))
-gulp.task 'optimize', gulp.series('compile', gulp.parallel(optimizeScripts, optimizeStyles, optimizeVendorScripts))
+gulp.task 'optimize', gulp.series('compile', gulp.parallel(optimizeVendorScripts, optimizeScripts, optimizeStyles, optimizeVendorScripts))
 
 gulp.task 'dist', gulp.series('optimize', cleanDistribution, createDistribution)
 
@@ -346,3 +363,5 @@ gulp.task 'dev', gulp.series('serve')
 gulp.task 'default', gulp.series('serve')
 
 gulp.task 'test', gulp.series('compile', compileTests, runTests)
+
+gulp.task 'test-browser', gulp.series('compile', compileTests, runTestsInBrowser)
