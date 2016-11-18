@@ -23,14 +23,7 @@
     <div class="row">
       <div class="col-sm-12">
         <h2>Get Started</h2>
-        <p>Cyclops is hosted on the <a href="http://assets.ctl.io/">CenturyLink Platform assets server</a> for anyone to use. Add <code>.cyclops</code> to the <code>html</code> tag to properly scope the styles. This allows Cyclops to override any existing styles that have been defined by legacy markup.</p>
-        <pre>
-          <code class="html">
-&lt;html lang=&quot;en&quot; class=&quot;cyclops&quot;&gt;
-          </code>
-        </pre>
-
-        <p>Then, include these links in your page layouts:</p>
+        <p>Cyclops is hosted on the <a href="http://assets.ctl.io/">CenturyLink Platform assets server</a> for anyone to use. Include these links in your page layouts:</p>
         <pre>
           <code class="html">
 &lt;!-- In between the head tags --&gt;
@@ -51,18 +44,6 @@
           </code>
         </pre>
 
-        <div class="alert alert-info">
-          <div class="alert-icon">
-            <svg class="cyclops-icon" aria-hidden="true"><use xlink:href='#icon-info-circle'></svg>
-          </div>
-          <h4 id="1-5-upgrade"><a href="#1-5-upgrade">Upgrading From 1.5 And Earlier</a></h4>
-          <p>In versions 1.5 and prior, Open Sans, a Google hosted font, was specced as the font for Cyclops. For performance and dependency reasons, Open Sans has been removed from Cyclops spec. This means the stylesheet that includes Open Sans should be removed from your project, as it is no longer specified in Cyclops styles.</p>
-
-          <pre class="m-t-sm m-b-sm m-l-lg"><code>&lt;!-- remove this --&gt;
-&lt;link href=&quot;https://fonts.googleapis.com/css?family=Open+Sans:300,400,600&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;</code></pre>
-          <p><a href="http://localhost:4000/typography.html#system-fonts">Learn more about the Operating System font stack.</a></p>
-        </div>
-
         <p>
           Not all of the javaScript libraries are strictly required. However, becuase they are
           referenced from a CDN, and are likely already cached client side, it is best practice to
@@ -75,7 +56,7 @@
         <pre>
           <code class="html">
 &lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot; class=&quot;cyclops&quot;&gt;
+&lt;html lang=&quot;en&quot;&gt;
   &lt;head&gt;
     &lt;meta charset=&quot;utf-8&quot;&gt;
     &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
