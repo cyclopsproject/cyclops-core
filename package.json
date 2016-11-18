@@ -2,6 +2,7 @@
   "name": "cyclops",
   "version": "2.0.0-alpha.1",
   "description": "The UX/UI Pattern Guide for the CenturyLink Platform",
+  "repository": "https://github.com/CyclopsProject/Cyclops-Core",
   "keywords": [
     "css",
     "framework",
