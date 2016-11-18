@@ -11,6 +11,7 @@
     "web"
   ],
   "scripts": {
+    "clean": "gulp clean",
     "compile": "gulp compile",
     "gulp": "./node_modules/gulp/bin/gulp.js",
     "serve": "gulp serve",
