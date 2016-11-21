@@ -330,8 +330,19 @@ runTests = ->
       ]
     )
 
-runTestsInBrowser = ->
-  # TODO
+runTestsInBrowsers = ->
+  gulp.src "#{paths.build.tests}/**/*.spec.js"
+    .pipe plugins.karmaRunner.server(
+      'singleRun': false
+      'frameworks': [ 'jasmine' ]
+      'browsers': [ 'PhantomJS', 'Chrome', 'Safari', 'Firefox' ]
+      'reporters': [ 'progress', 'kjhtml' ]
+      files: [
+        "#{paths.build.scripts}/vendor/**/*.js"
+        "#{paths.build.scripts}/cyclops.js"
+        "#{paths.build.tests}/**/*.spec.js"
+      ]
+    )
 
 # Tasks ------------------------------------------------------------------------
 
@@ -364,4 +375,4 @@ gulp.task 'default', gulp.series('serve')
 
 gulp.task 'test', gulp.series('compile', compileTests, runTests)
 
-gulp.task 'test-browser', gulp.series('compile', compileTests, runTestsInBrowser)
+gulp.task 'test-browsers', gulp.series('compile', compileTests, runTestsInBrowsers)
