@@ -259,7 +259,7 @@ compileWebsite = ->
   hbs = require 'express-hbs'
   through = require 'through2'
 
-  gulp.src "#{paths.website.base}/**/*.html"
+  gulp.src "#{paths.website.base}/**/**/*.html"
     .pipe through.obj (file, enc, cb) ->
       render = hbs.create().express3
         viewsDir: paths.website.base
