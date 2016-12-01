@@ -321,8 +321,8 @@ runTests = ->
     .pipe plugins.karmaRunner.server(
       'singleRun': true
       'frameworks': [ 'jasmine' ]
-      'browsers': [ 'PhantomJS' ] # 'Chrome' ] # , 'Safari', 'Firefox' ]
-      'reporters': [ 'progress' ] # 'kjhtml' ]
+      'browsers': [ 'PhantomJS' ]
+      'reporters': [ 'verbose' ]
       files: [
         "#{paths.build.scripts}/vendor/**/*.js"
         "#{paths.build.scripts}/cyclops.js"
@@ -337,7 +337,7 @@ runTestsInBrowsers = ->
       'singleRun': false
       'frameworks': [ 'jasmine' ]
       'browsers': [ 'PhantomJS', 'Chrome', 'Safari', 'Firefox' ]
-      'reporters': [ 'progress', 'kjhtml' ]
+      'reporters': [ 'verbose', 'kjhtml' ]
       files: [
         "#{paths.build.scripts}/vendor/**/*.js"
         "#{paths.build.scripts}/cyclops.js"
