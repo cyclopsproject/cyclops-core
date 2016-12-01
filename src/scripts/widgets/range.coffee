@@ -27,6 +27,9 @@ $.widget 'cyclops.range',
       'step': this.boundValues.step
     }
 
+    if this.element.is '[disabled]'
+      this.$txtInput.prop 'disabled', 'disabled'
+
     $container.insertBefore this.element
     $container.find(".range-input-container").append this.element
 
@@ -122,3 +125,14 @@ $.widget 'cyclops.range',
     # if no value is passed treat this call as a getter
     else
       return this.boundValues.step
+
+  disable: (value) ->
+    # if a value is passed treat this call as a setter
+    if not (value == undefined)
+      console.log "disable value is #{value}"
+      this.element.prop 'disabled', value
+      this.$txtInput.prop 'disabled', value
+      return
+    # if no value is passed treat this call as a getter
+    else
+      return this.element.prop 'disabled'

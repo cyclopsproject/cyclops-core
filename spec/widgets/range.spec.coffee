@@ -10,8 +10,8 @@ describe 'Widgets: range', ->
     $('#customRange').range()
     expect(input.parents('.range-container').length).toBeGreaterThan(0);
 
-  it 'sets the min max step and value of the input', ->
-    input = $('<input id="customRange" type="range" value="40" min="0" max="100" step="10" />')
+  it 'sets the min max step value disabled of the input', ->
+    input = $('<input id="customRange" disabled type="range" value="40" min="0" max="100" step="10" />')
     $(testNode).append input
     $('#customRange').range()
     txtInput = $('input[type=number]')
@@ -19,6 +19,7 @@ describe 'Widgets: range', ->
     expect(txtInput.attr('max')).toBe("100")
     expect(txtInput.attr('step')).toBe("10")
     expect(txtInput.val()).toBe("40")
+    expect(txtInput.prop('disabled')).toBe(true)
 
   it 'sets the value of the range when a number is typed', ->
     input = $('<input id="customRange" type="range" value="40" min="0" max="100" step="10" />')
@@ -137,3 +138,18 @@ describe 'Widgets: range', ->
     widget = $('#customRange').range()
     widget.range('step', 20)
     expect(widget.range('step')).toBe(20)
+
+  it 'allows the disabled property to be read programitically', ->
+    input = $('<input id="customRange" type="range" value="40" min="0" max="100" step="10" />')
+    $(testNode).append input
+    widget = $('#customRange').range()
+    expect(widget.range('disable')).toBe(false)
+
+  it 'allows the disabled value to be set programitically', ->
+    input = $('<input id="customRange" type="range" value="40" min="0" max="100" step="10" />')
+    $(testNode).append input
+    widget = $('#customRange').range()
+    widget.range('disable', true)
+    expect(widget.range('disable')).toBe(true)
+    widget.range('disable', false)
+    expect(widget.range('disable')).toBe(false)
