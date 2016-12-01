@@ -326,6 +326,7 @@ runTests = ->
       files: [
         "#{paths.build.scripts}/vendor/**/*.js"
         "#{paths.build.scripts}/cyclops.js"
+        "#{paths.build.tests}/helpers/**/*.js"
         "#{paths.build.tests}/**/*.spec.js"
       ]
     )
@@ -340,6 +341,7 @@ runTestsInBrowsers = ->
       files: [
         "#{paths.build.scripts}/vendor/**/*.js"
         "#{paths.build.scripts}/cyclops.js"
+        "#{paths.build.tests}/helpers/**/*.js"
         "#{paths.build.tests}/**/*.spec.js"
       ]
     )

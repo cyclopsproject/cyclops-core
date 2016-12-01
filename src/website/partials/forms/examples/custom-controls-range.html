@@ -1,0 +1,17 @@
+<form id="formSlider" class="form-horizontal" data-bind="validationOptions: { insertMessages: false, allowHtmlMessages: true, errorsAsTitle: false }">
+	<div class="form-group">
+		<label class="col-sm-3 control-label" for="customRange">Range</label>
+		<div class="col-sm-9">
+			<input id="customRange" type="range" value="40" min="0" max="100" step="10" />
+		</div>
+	</div>
+</form>
+
+
+{{#contentFor "scripts"}}
+<script>
+	$(function(){
+    $("#customRange").range();
+	});
+</script>
+{{/contentFor}}
