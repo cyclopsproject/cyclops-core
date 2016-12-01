@@ -1,0 +1,76 @@
+{{#contentFor "title"}}API | Range{{/contentFor}}
+{{#contentFor "tabName"}}range{{/contentFor}}
+{{!< layouts/code.html}}
+
+<h1>Range</h1>
+<p>
+  While Cyclops Core has styled the standard range input type some experiences
+  may call for a more embellished and interactive input. In these cases an
+  application and choose to use the range widget to extend the functionality.
+</p>
+<pre class="show-type">
+  <code class="html">
+&lt;input id=&quot;customRange&quot; type=&quot;range&quot; min=&quot;1&quot; max=&quot;100&quot; step=&quot;10&quot; /&gt;
+  </code>
+  <code class="javascript">
+var rangeNode = $("#customRange").range({
+  valueChange: function(evt, data){ }
+});
+rangeNode.range("value");
+rangeNode.range("value", 10);
+  </code>
+</pre>
+<h3>Options</h3>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>valueChange</td>
+      <td>function(event, data)</td>
+      <td class="deemphasize">none</td>
+      <td>Called every time the value changes, use <code>data.value</code> to access to value</td>
+    </tr>
+  </tbody>
+</table>
+<h3>Methods</h3>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>value({number})</code></td>
+      <td>reads or sets the current value</td>
+    </tr>
+    <tr>
+      <td><code>min({number})</code></td>
+      <td>reads or sets the current min value</td>
+    </tr>
+    <tr>
+      <td><code>max({number})</code></td>
+      <td>reads or sets the current max value</td>
+    </tr>
+    <tr>
+      <td><code>step({number})</code></td>
+      <td>reads or sets the current step value</td>
+    </tr>
+    <tr>
+      <td><code>disabled({boolean})</code></td>
+      <td>reads or sets wheather or not the control is disabled</td>
+    </tr>
+    <tr>
+      <td><code>destory()</code></td>
+      <td>remove the range widget</td>
+    </tr>
+  </tbody>
+</table>
