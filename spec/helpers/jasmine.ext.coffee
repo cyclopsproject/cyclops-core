@@ -1,6 +1,5 @@
 # not going to lie took this handy helper from the knockout source
 jasmine.prepareTestNode = ->
-  console.log 'preparing test node'
   # The bindings specs make frequent use of this utility function to set up
   # a clean new DOM node they can execute code against
   existingNode = document.getElementById('testNode')

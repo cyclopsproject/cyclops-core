@@ -1,3 +1,5 @@
+# TODO: disable txtINput when range disabled
+
 $.widget 'cyclops.range',
 
   containerTemplate: (context) ->
@@ -10,9 +12,9 @@ $.widget 'cyclops.range',
 
   _create: ->
     this.boundValues = {
-      min: this.element.attr('min') ? 1
-      max: this.element.attr('max') ? 128
-      step: this.element.attr('step') ? 1
+      min: parseInt(this.element.attr('min'), 10) ? 1
+      max: parseInt(this.element.attr('max'), 10) ? 128
+      step: parseInt(this.element.attr('step'), 10) ? 1
     }
 
     $container = ($ this.containerTemplate this.boundValues)
@@ -56,7 +58,7 @@ $.widget 'cyclops.range',
     this._trigger 'valueChange', null, {value: value}
 
   _refreshValue: () ->
-    oldVal = parseInt his.element.val(), 10
+    oldVal = parseInt this.element.val(), 10
     # try to contrain the value
     newVal = this._constrainValue oldVal
     # if the value changes set a new value
@@ -80,7 +82,7 @@ $.widget 'cyclops.range',
       return
     # if no value is passed treat this call as a getter
     else
-      return parseInt his.element.val(), 10
+      return parseInt this.element.val(), 10
 
   max: (value) ->
     # if a value is passed treat this call as a setter
