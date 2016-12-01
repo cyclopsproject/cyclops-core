@@ -1,39 +1,24 @@
-// checkbox toggle
-.toggle {
-  position: relative;
-  width: 70px;
+//
+// Cyclops Toggle Widget
+//
+.cyclops-toggle-widget {
   height: 34px;
+  position: relative;
   user-select: none;
-
-  &.disabled {
-    cursor: not-allowed;
-
-    label {
-      cursor: not-allowed;
-    }
-
-    .handle,
-    .text .affirmative,
-    .text .negative {
-      color: #bababa;
-      background-color: #eee;
-    }
-  }
+  width: 70px;
 
   input {
     display: none;
-  }
 
-  input:checked + .bug-fix {
-    .text {
+    &:checked ~ .handle {
+      right: 0;
+    }
+
+    &:checked ~ .text {
       margin-left: 0;
       background-color: @brand-success;
       border: 1px solid darken(@brand-success, 5%);
       color: #fff;
-    }
-
-    .handle {
-      right: 0;
     }
   }
 
@@ -56,9 +41,7 @@
     transition: background 0.3s ease-in, border 0.3s ease-in, color .1s ease-in .1s;
   }
 
-
-  .affirmative,
-  .negative {
+  .affirmative, .negative {
     float: left;
     width: 34px;
     padding: 0;
@@ -71,10 +54,10 @@
     left: 34px;
   }
 
-
   .handle {
     display: block;
     width: 35px;
+    height: 35px;
     background: #fff;
     position: absolute;
     top: 0;
@@ -84,4 +67,18 @@
     border: 1px solid @border-color;
     transition: all 0.3s ease-in 0s;
   }
+
+  // Disabled State ------------------------------------------------------------
+
+  &.disabled {
+    cursor: not-allowed;
+    // TODO: The previous disabled support wouldn't highlight the on/off state.
+    //       Is this an acceptable solution instead?
+    opacity: 0.5;
+
+    label {
+      cursor: inherit;
+    }
+  }
+
 }

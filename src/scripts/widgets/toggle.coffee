@@ -1,5 +1,3 @@
-# TODO: 1. disabled
-
 #
 # Cyclops Toggle Widget
 #
@@ -7,54 +5,63 @@
 #
 #   TODO
 #
-$.widget "cylops.toggle",
+$.widget 'cylops.toggle',
+
+  container: null
 
   options:
-    affirmativeText: "yes"
-    negativeText: "no"
-    defaultChecked: false
+    affirmativeText: 'yes'
+    defaults:
+      checked: false
+      disabled: false
+    negativeText: 'no'
 
   containerTemplate: (context) ->
     """
-    <div class="toggle">
-      <label>
-        <div class="bug-fix">
+      <div class="cyclops-toggle-widget">
+        <label>
           <div class="text">
             <div class="affirmative">#{context.affirmativeText}</div>
             <div class="negative">#{context.negativeText}</div>
           </div>
-          <svg class="handle" height="34" viewBox="0 0 35 34">
-            <g>
-              <rect x="13" y="13" fill="#777777" width="1" height="1"/>
-              <rect x="16" y="13" fill="#777777" width="1" height="1"/>
-              <rect x="19" y="13" fill="#777777" width="1" height="1"/>
-              <rect x="13" y="16" fill="#777777" width="1" height="1"/>
-              <rect x="16" y="16" fill="#777777" width="1" height="1"/>
-              <rect x="19" y="16" fill="#777777" width="1" height="1"/>
-              <rect x="13" y="19" fill="#777777" width="1" height="1"/>
-              <rect x="16" y="19" fill="#777777" width="1" height="1"/>
-              <rect x="19" y="19" fill="#777777" width="1" height="1"/>
-            </g>
+          <svg class="handle" aria-hidden="true">
+            <use xlink:href="#icon-handle" />
           </svg>
-        </div>
-      </label>
-    </div>
+        </label>
+      </div>
     """
 
   _create: ->
-    $container = ($ this.containerTemplate
+    this.container = ($ this.containerTemplate
       affirmativeText: this.options.affirmativeText
       negativeText: this.options.negativeText
     )
 
-    $container.insertBefore this.element
-    this.element.insertBefore $container.find(".bug-fix")
-    this.element.prop "checked", this.options.defaultChecked
+    this.container.insertBefore this.element
+    this.element.prependTo this.container.find('label')
+    this.element.prop 'checked', this.options.defaults.checked
+    this.element.prop 'disabled', this.options.defaults.disabled
+    if this.options.defaults.disabled
+      this.container.addClass 'disabled'
     if this.options.onChange
-      this.element.on "change", (event) =>
+      this.element.on 'change', (event) =>
         element = event.target
         this.options.onChange(element.checked)
 
   _destroy: ->
-    this.element.off "change"
-    # TODO: Remove the container from the DOM
+    this._super()
+    this.element.off 'change'
+    this.element.insertBefore this.container
+    this.container.remove()
+    return this
+
+  _setChecked: (checked) ->
+    this.element.prop('checked', checked)
+    # this._trigger 'valueChange', null, {value: value}
+
+  checked: (checked) ->
+    unless checked is undefined
+      this._setChecked(checked)
+      return this
+    else
+      this.element.prop('checked')

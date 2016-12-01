@@ -1,22 +1,16 @@
 <form id="formToggle" class="form-horizontal">
 	<div class="form-group">
-		<label class="col-sm-3 control-label">toggle</label>
+		<label class="col-sm-3 control-label" for="customToggle">Toggle</label>
 		<div class="col-sm-9">
-			<toggle></toggle>
+			<input id="customToggle" type="checkbox" />
 		</div>
 	</div>
 </form>
 
-
 {{#contentFor "scripts"}}
-<script>
-$(function(){
-
-	/* Start Toggle */
-  ko.applyBindings({}, $("#formToggle")[0]);
-  /* End Toggle */
-
-})
-</script>
-
+	<script>
+		$(function() {
+			$('#customToggle').toggle();
+		});
+	</script>
 {{/contentFor}}

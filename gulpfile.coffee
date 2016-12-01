@@ -326,7 +326,7 @@ runTests = ->
       'singleRun': true
       'frameworks': [ 'jasmine' ]
       'browsers': [ 'PhantomJS' ]
-      'reporters': [ 'verbose' ]
+      'reporters': [ 'progress' ]
       files: [
         "#{paths.build.scripts}/vendor/**/*.js"
         "#{paths.build.scripts}/cyclops.js"

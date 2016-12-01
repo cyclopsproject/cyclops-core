@@ -1,12 +1,13 @@
 <section class="pl-section" id="customControls">
   <h3><a href="#customControls">Custom Controls</a></h3>
   <p>
-    For more complex controls that require more than simple HTML markup we use
-    <a href="https://jqueryui.com/widget/">jQueryUI Widgets</a>. This allows
-    cyclops in embellish and extend standard HTML markup providing a richer user experience.
+    For more complex controls that require more than simple markup, we utilize
+    the <a href="https://jqueryui.com/widget/">jQuery UI Widget</a> pattern. This
+    does not mean that we require jQuery UI, however, we simply include and use
+    this pattern to provide a consistent API for you to interact with. These
+    widgets allow us to use Cyclops to embellish and extend the standard markup
+    to provide a richer user experience.
   </p>
-
-
 
   <h4 id="toggle">
     <a href="#toggle">Toggle</a>
@@ -15,9 +16,22 @@
   <div class="pl-example">
     {{> forms/examples/custom-controls-toggle }}
   </div>
-  <pre>
+  <pre show-type>
     <code class="html">
-  &lt;toggle params=&quot;value: value, disabled: disabled, affirmativeText: 'yes', negativeText: 'no'&quot;&gt;&lt;/toggle&gt;
+&lt;input id="customToggle" type="checkbox" /&gt;
+    </code>
+    <code class="javascript">
+var toggleWidget = $("#customToggle").toggle({
+  onChange: function(event, data) {
+    // Called every time the checked state changes.
+  }
+});
+
+// Get the current checked state
+toggleNode.toggle("checked");
+
+// Set the state to checked
+toggleNode.toggle("checked", true);
     </code>
   </pre>
 
