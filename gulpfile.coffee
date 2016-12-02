@@ -283,6 +283,10 @@ compileWebsite = ->
           console.log err
     .pipe gulp.dest(paths.build.website)
 
+  # Copy website Images
+  gulp.src "#{paths.website.base}/images/**/*"
+    .pipe gulp.dest("#{paths.build.website}/img")
+
   # Symlink Styles and Scripts
   gulp.src paths.build.styles
     .pipe plugins.symlink("#{paths.build.website}/css", force: true)

@@ -6,11 +6,11 @@
       <div class="nav nav-stacked">
         <ul class="tabs">
           <li class="tab"><a href="#whatIsCyclops">What is Cyclops?</a></li>
+          <li class="tab"><a href="#whatIsCore">What is Cyclops Core</a></li>
           <li class="tab"><a href="#WhereToGetCyclops">Where can I get it?</a></li>
           <li class="tab"><a href="#dependencies">What are the dependencies?</a></li>
           <li class="tab"><a href="#browserSupport">What browsers does it support?</a></li>
           <li class="tab"><a href="#versions">How can I get notified about new versions / features?</a></li>
-          <li class="tab"><a href="#angular">Can I use it with Angular?</a></li>
           <li class="tab"><a href="#angular">Who is responsible for Cyclops?</a></li>
         </ul>
       </div>
@@ -19,33 +19,42 @@
       <section id="whatIsCyclops" class="qa">
         <h4>What is Cyclops?</h4>
         <p>
-          Cyclops is the CenturyLink Cloud's collection of user interface patterns that make up the Control Portal interface. For more information please see the <a href="./about.html">about</a> page for a full explanation.
+          Cyclops is the CenturyLink Cloud's collection of user interface patterns that make up the
+          Control Portal interface. For more information please see the
+          <a href="./about.html">about</a> page for a full explanation.
+        </p>
+      </section>
+      <section id="whatIsCore" class="qa">
+        <h4>What is Cyclops Core?</h4>
+        <p>
+          Cyclops Core is part of the Cyclops Project, a collection of Cyclops related libraries.
+          During development of v2.0.0 it was decided to create a core library (Cyclops Core) with
+          as few external dependencies as possible and move framework specific components into
+          framework libraries (Cyclops Anglugar2, Cyclops Knockout, etc.)
         </p>
       </section>
       <section id="WhereToGetCyclops" class="qa">
         <h4>Where can I get it?</h4>
         <p>
-          It is recommended that you use the CDN version of Cyclops that is hosted on
-          <a href="assets.ctl.io">assets.ctl.io</a>. This provides many caching and performance
-          benefits. If you would like to view of the source if can be found on
-          <a href="https://www.github.com/CenturyLinkCloud/Cyclops/">github</a>. For more
-          information about what is needed to get up and running with Cyclops see the
-          <a href="./">Getting Started</a> page.
+          There is a CDN version of Cyclops Core that is hosted on
+          <a href="assets.ctl.io">assets.ctl.io</a>. This provides built in caching and
+          performance benefits. However, if an application already has a built in bundling
+          and minification then a local copy may be reference either by downloading the file
+          from the assets server or installing it via NPM.
         </p>
       </section>
       <section id="dependencies" class="qa">
         <h4>What are the dependencies?</h4>
         <p>
-          A full list of dependencies both optional and required can be found
-          <a href="./dependencies.html">here</a>.
+          A full list of dependencies can be found <a href="./dependencies.html">here</a>.
         </p>
       </section>
       <section id="browserSupport" class="qa">
         <h4>What browsers does it support?</h4>
         <p>
-          The browser support matrix for Cyclops matches that of the CenturyLink Control
-          Portal. We support the current versions of Chrome, Safari, and Firefox. For Internet
-          Explorer we support IE9 and above with IE9 having some fall back behaviors.
+        Cyclops supports the latest versions of all major browsers. Specifically for Internet
+        Explorer, IE9 + is supported with IE9 having fall back behaviors and some more advanced
+        features may not work.
         </p>
       </section>
       <section id="versions" class="qa">
@@ -59,24 +68,14 @@
         please open and issue on the Cyclops github repository.
         </p>
       </section>
-      <section id="angular" class="qa">
-        <h4>Can I use it with Angular?</h4>
-        <p>
-          Cyclops is built on the standard set of CenturyLink Control Portal Frameworks,
-          which include jQuery, jQuery UI, Knockout, and Knockout Validation. Because of this
-          Cyclops provides many of its controls and helper as knockout related features or
-          extensions.
-        </p>
-        <p>
-          Cyclops can currently be used in conjunction with Angular in one of two ways. One,
-          you can use the styles and markup provided and use Angular for everything
-          else. Two, you can use Angular for the routing and controller bits and use knockout
-          for the markup binding and templating.
-        </p>
-      </section>
       <section id="author" class="qa">
         <h4>Who is responsible for Cyclops?</h4>
-        <p>Cyclops is written and maintained by the UI/UX Team at <a href="https://www.ctl.io">CenturyLink Cloud</a>. To get in touch, <a href="https://github.com/CenturyLinkCloud/Cyclops/issues">file an issue</a> in the <a href="https://github.com/CenturyLinkCloud/Cyclops">Github repo</a>, or request access to their <a href="https://centurylinkuiux.slack.com/">Slack</a> by emailing cloud-design [a] ctl.io.</p>
+        <p>Cyclops is written and maintained by the UI/UX Team at
+          <a href="https://www.ctl.io">CenturyLink Cloud</a>. To get in touch,
+          <a href="https://github.com/cyclopsproject/cyclops-core/issues">file an issue</a> in the
+          <a href="https://github.com/cyclopsproject/cyclops-core">Github repo</a>, or request
+          access to their <a href="https://centurylinkuiux.slack.com/">Slack</a> by emailing
+          cloud-design [a] ctl.io.</p>
       </section>
     </div>
   </div>
