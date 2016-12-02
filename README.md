@@ -1,15 +1,15 @@
 # cyclops-core
 The UI/UX Pattern Guide for the CenturyLink Platform.
 
-# v2.0.0 roadmap
+## v2.0.0 roadmap
 
-## Themes
+### Themes
 - Remove as many dependencies as possible
 - Increase the support for different frameworks
 - Strong focus on performance
 - Maintain and/or improve the level and quality of documentation
 
-## Execution
+### Execution
 - Break Cyclops up into a core package and framework dependent packages
 - Core package will be based on jQuery Widgets
 - Produce framework packages for knockout, angular 1/2, react, ember
