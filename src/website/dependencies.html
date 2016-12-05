@@ -4,18 +4,18 @@
 
 <h1>Dependencies</h1>
 <p>
-  Cyclops Core has very few external dependencies in order to be as flexible as possible.
-  Currently the only external dependency is on <a href="https://jquery.com/">jQuery</a>. A
-  consuming application may choose not to use jQuery but it is required for the internals of
-  Cyclops Core. Our custom controls are exposed through the use of jQuery Widgets allowing
-  Cyclops Core to embellish and extend standard HTML markup providing a richer user experience.
-  However, if you would a more native consumption model please refer to one of the Cyclops
-  Project’s framework specific packages.
+  At this time Cyclops Core has no external dependencies. Internally any
+  dependencies are bundled and encapsulated with the Cyclops script.
+  These dependencies are not public and are simply and internal
+  implementation detail. If Cyclops Core is consumed and no other framework
+  library is included our widgets will be registered with the global
+  version on jQuery, if and when included, to allow consumption of our
+  components without a framework.
 </p>
 
 <section id="required" class="pl-section">
   <h3 id="required">Required</h3>
   <ul>
-    <li><a href="https://jquery.com/">jQuery</a></li>
+    <li>none</li>
   </ul>
 </section>
