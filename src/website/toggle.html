@@ -4,14 +4,14 @@
 
 <h1>Toggle</h1>
 <p>
-  stuff
+  Embellishes a standard checkbox input element to appear as a toggle switch.
 </p>
 <pre class="show-type">
   <code class="html">
-Hello, world!
+&lt;input id=&quot;customCheckbox&quot; type=&quot;checkbox&quot; /&gt;
   </code>
   <code class="javascript">
-// my code
+var toggleWidget = $("#customCheckbox").toggle();
   </code>
 </pre>
 <h3>Options</h3>
@@ -26,10 +26,34 @@ Hello, world!
   </thead>
   <tbody>
     <tr>
-      <td>foo</td>
+      <td>affirmativeText</td>
+      <td>string</td>
+      <td>yes</td>
+      <td>text to display in the toggle when checked</td>
+    </tr>
+    <tr>
+      <td>checked</td>
       <td>boolean</td>
+      <td>false</td>
+      <td>whether or not the toggle should be checked</td>
+    </tr>
+    <tr>
+      <td>disabled</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>whether or not the toggle should be disabled</td>
+    </tr>
+    <tr>
+      <td>negativeText</td>
+      <td>string</td>
+      <td>no</td>
+      <td>text to display in the toggle when not checked</td>
+    </tr>
+    <tr>
+      <td>onChange</td>
+      <td>function(event, data)</td>
       <td class="deemphasize">none</td>
-      <td>soemthing</td>
+      <td>Called every time the checked state changes, use data.checked to access the checked state</td>
     </tr>
   </tbody>
 </table>
@@ -43,9 +67,16 @@ Hello, world!
   </thead>
   <tbody>
     <tr>
-      <td><code>foo</code></td>
-      <td>bar</td>
+      <td><code>checked({boolean})</code></td>
+      <td>reads or sets the current checked state</td>
     </tr>
-
+    <tr>
+      <td><code>disabled({boolean})</code></td>
+      <td>reads or sets whether or not the control is disabled</td>
+    </tr>
+    <tr>
+      <td><code>destory()</code></td>
+      <td>remove the toggle widget</td>
+    </tr>
   </tbody>
 </table>
