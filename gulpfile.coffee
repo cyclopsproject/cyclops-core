@@ -6,6 +6,8 @@
 #
 # ## Tasks
 #
+#   * `gulp clean`
+#
 #   * `gulp compile` will compile all of the assets, scripts, styles and website
 #      into the `build` folder. The website may be viewed by opening the
 #      `build/website/index.html` file.
@@ -14,13 +16,15 @@
 #     styles and scripts, compressing images, etc). The optimized output will
 #     be written to the `build` folder.
 #
+#   * `gulp test` and `gulp test-browsers`
+#
 #   * `gulp dist` will compile, optimize and package Cyclops for distribution
 #     in the `dist` folder. The current version in `package.json` will be used
 #     as the name of its containing folder in `dist`.
 #
-#   * `gulp watch`
+#   * `gulp serve`
 #
-# The default task is `watch`.
+# The default task is `serve`.
 #
 
 # Dependencies -----------------------------------------------------------------
@@ -28,11 +32,10 @@
 del = require 'del'
 gulp = require 'gulp'
 notifier = require 'node-notifier'
-streamqueue = require 'streamqueue'
-es = require 'event-stream'
-through = require 'through2'
 pkg = require './package.json'
-plugins = require('gulp-load-plugins')()
+plugins = require('gulp-load-plugins')(pattern: [ 'gulp-*', 'gulp.*', '*-stream' ])
+streamqueue = require 'streamqueue'
+through = require 'through2'
 
 # Configuration ----------------------------------------------------------------
 
@@ -95,24 +98,24 @@ options =
       else
         throw error
 
-
 # Helpers ----------------------------------------------------------------------
 
 appendStream = () ->
   pass = through.obj()
-  return es.duplex(pass, streamqueue({ objectMode: true }, pass, arguments[0]))
+  plugins.eventStream.duplex(pass, streamqueue(objectMode: true, pass, arguments[0]))
 
 # Assets -----------------------------------------------------------------------
 
 cleanAssets = ->
   del paths.build.assets
 
-compileAssets = ->
-  return
+compileAssets = (done) ->
+  # TODO: ...
+  done()
 
-optimizeAssets = ->
+optimizeAssets = (done) ->
   # TODO: pngcrush,etc?
-  return
+  done()
 
 # Scripts ----------------------------------------------------------------------
 
@@ -121,6 +124,7 @@ cleanScripts = ->
 
 compileScripts = ->
   # inline icons SVGs
+  # TODO: Move to assets tasks
   svgs = gulp.src "#{paths.assets.icons}/**/*.svg"
     .pipe plugins.rename(prefix: 'icon-')
     .pipe plugins.svgmin()
@@ -128,16 +132,15 @@ compileScripts = ->
 
   afterFile = gulp.src "#{paths.scripts.build}/after.js"
     .pipe plugins.inject(svgs, {
-        name: 'icons',
-        transform: (filePath, file) ->
-          return file.contents.toString().replace(/"/g, '\\"')
-       })
-
+      name: 'icons',
+      transform: (filePath, file) ->
+        return file.contents.toString().replace(/"/g, '\\"')
+     })
 
   # CoffeeScript Files
-  gulp.src "#{paths.scripts.core}/**/*.coffee"
+  coffeeScriptFiles = gulp.src "#{paths.scripts.core}/**/*.coffee"
     .pipe plugins.plumber(options.plumber)
-    .pipe plugins.coffee({bare: true})
+    .pipe plugins.coffee(bare: true)
     .pipe plugins.addSrc.prepend "#{paths.scripts.build}/before.js"
     .pipe appendStream afterFile
     .pipe plugins.sourcemaps.init()
@@ -146,6 +149,7 @@ compileScripts = ->
     .pipe gulp.dest(paths.build.scripts)
 
   # TODO: ES6 via Babel
+  plugins.mergeStream svgs, afterFile, coffeeScriptFiles
 
 optimizeScripts = ->
   gulp.src "#{paths.build.scripts}/cyclops.js"
@@ -184,33 +188,36 @@ cleanVendor = ->
   del [ paths.scripts.vendor, paths.styles.vendor ]
 
 compileVendorScripts = ->
+  plugins.mergeStream(
 
-  # Copy Vendor Scripts
-  gulp.src "#{paths.scripts.vendor}/**/*.js"
-    .pipe plugins.sourcemaps.init()
-    .pipe plugins.sourcemaps.write('.')
-    .pipe gulp.dest("#{paths.build.scripts}/vendor")
+    # Copy Vendor Scripts
+    gulp.src "#{paths.scripts.vendor}/**/*.js"
+      .pipe plugins.sourcemaps.init()
+      .pipe plugins.sourcemaps.write('.')
+      .pipe gulp.dest("#{paths.build.scripts}/vendor")
 
-  # Compile and Copy Vendor CoffeeScripts
-  gulp.src "#{paths.scripts.vendor}/**/*.coffee"
-    .pipe plugins.plumber(options.plumber)
-    .pipe plugins.coffee()
-    .pipe plugins.sourcemaps.init()
-    .pipe plugins.sourcemaps.write('.')
-    .pipe gulp.dest("#{paths.build.scripts}/vendor")
+    # Compile and Copy Vendor CoffeeScripts
+    gulp.src "#{paths.scripts.vendor}/**/*.coffee"
+      .pipe plugins.plumber(options.plumber)
+      .pipe plugins.coffee()
+      .pipe plugins.sourcemaps.init()
+      .pipe plugins.sourcemaps.write('.')
+      .pipe gulp.dest("#{paths.build.scripts}/vendor")
 
-  # Copy jQuery
-  gulp.src 'node_modules/jquery/dist/jquery.js'
-    .pipe plugins.sourcemaps.init()
-    .pipe plugins.sourcemaps.write('.')
-    .pipe gulp.dest("#{paths.build.scripts}/vendor")
+    # Copy jQuery
+    gulp.src 'node_modules/jquery/dist/jquery.js'
+      .pipe plugins.sourcemaps.init()
+      .pipe plugins.sourcemaps.write('.')
+      .pipe gulp.dest("#{paths.build.scripts}/vendor")
 
-  # Copy Widget Factory from jQuery UI
-  gulp.src 'node_modules/jquery-ui/ui/widget.js'
-    .pipe plugins.sourcemaps.init()
-    .pipe plugins.rename('jquery.widget.js')
-    .pipe plugins.sourcemaps.write('.')
-    .pipe gulp.dest("#{paths.build.scripts}/vendor")
+    # Copy Widget Factory from jQuery UI
+    gulp.src 'node_modules/jquery-ui/ui/widget.js'
+      .pipe plugins.sourcemaps.init()
+      .pipe plugins.rename('jquery.widget.js')
+      .pipe plugins.sourcemaps.write('.')
+      .pipe gulp.dest("#{paths.build.scripts}/vendor")
+
+  )
 
 optimizeVendorScripts = ->
   gulp.src [ "#{paths.build.scripts}/vendor/**/*.js", "!#{paths.build.scripts}/vendor/**/*.min.js" ]
@@ -259,40 +266,42 @@ compileWebsite = ->
   hbs = require 'express-hbs'
   through = require 'through2'
 
-  gulp.src "#{paths.website.base}/**/**/*.html"
-    .pipe through.obj (file, enc, cb) ->
-      render = hbs.create().express3
-        viewsDir: paths.website.base
-        partialsDir: paths.website.partials
-        layoutDir: paths.website.layouts
-        defaultLayout: "#{paths.website.layouts}/default.html"
-        extName: 'html'
-      locals = {
-        settings: {
-          views: paths.website.base
-        },
-        version: pkg.version
-      }
-      render file.path, locals, (err, html) =>
-        if (!err)
-          file.contents = new Buffer(html)
-          this.push(file)
-          cb()
-        else
-          console.log 'failed to render #{file.path}'
-          console.log err
-    .pipe gulp.dest(paths.build.website)
+  plugins.mergeStream(
+    gulp.src "#{paths.website.base}/**/**/*.html"
+      .pipe through.obj (file, enc, cb) ->
+        render = hbs.create().express3
+          viewsDir: paths.website.base
+          partialsDir: paths.website.partials
+          layoutDir: paths.website.layouts
+          defaultLayout: "#{paths.website.layouts}/default.html"
+          extName: 'html'
+        locals = {
+          settings: {
+            views: paths.website.base
+          },
+          version: pkg.version
+        }
+        render file.path, locals, (err, html) =>
+          if (!err)
+            file.contents = new Buffer(html)
+            this.push(file)
+            cb()
+          else
+            console.log 'failed to render #{file.path}'
+            console.log err
+      .pipe gulp.dest(paths.build.website)
 
-  # Copy website Images
-  gulp.src "#{paths.website.base}/images/**/*"
-    .pipe gulp.dest("#{paths.build.website}/img")
+    # Copy Website Images
+    gulp.src "#{paths.website.base}/images/**/*"
+      .pipe gulp.dest("#{paths.build.website}/img")
 
-  # Symlink Styles and Scripts
-  # TODO: Make the server support serving from these paths without symlinks
-  gulp.src paths.build.styles
-    .pipe plugins.symlink("#{paths.build.website}/styles", force: true)
-  gulp.src paths.build.scripts
-    .pipe plugins.symlink("#{paths.build.website}/scripts", force: true)
+    # Symlink Styles and Scripts
+    # TODO: Make the server support serving from these paths without symlinks
+    gulp.src paths.build.styles
+      .pipe plugins.symlink("#{paths.build.website}/styles", force: true)
+    gulp.src paths.build.scripts
+      .pipe plugins.symlink("#{paths.build.website}/scripts", force: true)
+  )
 
 # Distribution -----------------------------------------------------------------
 
@@ -302,11 +311,10 @@ cleanDistribution = ->
 cleanAllDistributions = ->
   del paths.distribution.base
 
-# TODO: Make this do the optimization
 createDistribution = ->
 
-  # Copy Build Output
-  gulp.src paths.build.base
+  # Copy Website to Distribution Output
+  gulp.src "#{paths.build.website}/**/*"
     .pipe gulp.dest("#{paths.distribution.base}/#{pkg.version}")
 
 # Tests ------------------------------------------------------------------------
@@ -351,33 +359,20 @@ runTestsInBrowsers = ->
 
 # Tasks ------------------------------------------------------------------------
 
-gulp.task 'clean', gulp.series(cleanAssets, cleanScripts, cleanStyles, cleanVendor, cleanWebsite, cleanTests)
+gulp.task 'clean', gulp.series(cleanAssets, cleanScripts, cleanStyles, cleanVendor, cleanWebsite, cleanTests, cleanDistribution)
 
-gulp.task 'compile', gulp.series('clean', gulp.parallel(compileVendorScripts, compileScripts, compileStyles), compileWebsite)
+gulp.task 'compile', gulp.series('clean', compileAssets, gulp.parallel(compileVendorScripts, compileScripts, compileStyles), compileWebsite)
 
-gulp.task 'optimize', gulp.series('compile', gulp.parallel(optimizeVendorScripts, optimizeScripts, optimizeStyles, optimizeVendorScripts))
+gulp.task 'test', gulp.series('compile', compileTests, runTests)
 
-gulp.task 'dist', gulp.series('optimize', cleanDistribution, createDistribution)
+gulp.task 'test-browsers', gulp.series('compile', compileTests, runTestsInBrowsers)
 
-# gulp.task 'assets', gulp.series(cleanAssets, compileAssets, optimizeAssets)
-gulp.task 'assets', gulp.series(cleanAssets)
+gulp.task 'optimize', gulp.series('compile', optimizeAssets, gulp.parallel(optimizeVendorScripts, optimizeScripts, optimizeStyles, optimizeVendorScripts))
 
-gulp.task 'scripts', gulp.series(cleanScripts, compileScripts, optimizeScripts)
-
-gulp.task 'styles', gulp.series(cleanStyles, compileStyles, optimizeStyles)
+gulp.task 'dist', gulp.series('optimize', createDistribution)
 
 gulp.task 'watch', gulp.series('compile', watch)
 
 gulp.task 'serve', gulp.parallel('watch', serve)
 
-gulp.task 'website', gulp.series(cleanWebsite, compileWebsite)
-
-gulp.task 'distribute', gulp.series(cleanDistribution, createDistribution)
-
-gulp.task 'dev', gulp.series('serve')
-
 gulp.task 'default', gulp.series('serve')
-
-gulp.task 'test', gulp.series('compile', compileTests, runTests)
-
-gulp.task 'test-browsers', gulp.series('compile', compileTests, runTestsInBrowsers)
