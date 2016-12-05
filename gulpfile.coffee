@@ -288,8 +288,7 @@ compileWebsite = ->
     .pipe gulp.dest("#{paths.build.website}/img")
 
   # Symlink Styles and Scripts
-  gulp.src paths.build.styles
-    .pipe plugins.symlink("#{paths.build.website}/css", force: true)
+  # TODO: Make the server support serving from these paths without symlinks
   gulp.src paths.build.styles
     .pipe plugins.symlink("#{paths.build.website}/styles", force: true)
   gulp.src paths.build.scripts
