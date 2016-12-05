@@ -6,25 +6,26 @@
 #
 # ## Tasks
 #
-#   * `gulp clean`
+#   * `gulp serve` (default)
 #
 #   * `gulp compile` will compile all of the assets, scripts, styles and website
 #      into the `build` folder. The website may be viewed by opening the
 #      `build/website/index.html` file.
 #
-#   * `gulp optimize` will optimize all of the built output (i.e. minimizing
-#     styles and scripts, compressing images, etc). The optimized output will
-#     be written to the `build` folder.
+#   * `gulp test`
 #
-#   * `gulp test` and `gulp test-browsers`
+#   * `gulp test-browsers`
 #
-#   * `gulp dist` will compile, optimize and package Cyclops for distribution
+#   * `gulp distribute` will compile, optimize and package Cyclops for distribution
 #     in the `dist` folder. The current version in `package.json` will be used
 #     as the name of its containing folder in `dist`.
 #
-#   * `gulp serve`
+# ### Using With NPM
 #
-# The default task is `serve`.
+#   * `npm start`
+#   * `npm run compile`
+#   * `npm test`
+#   * `npm run dist`
 #
 
 # Dependencies -----------------------------------------------------------------
@@ -144,15 +145,69 @@ compileScripts = ->
     .pipe plugins.addSrc.prepend "#{paths.scripts.build}/before.js"
     .pipe appendStream afterFile
     .pipe plugins.sourcemaps.init()
-    .pipe plugins.concat('cyclops.js')
+    .pipe plugins.concat('cyclops.core.js')
     .pipe plugins.sourcemaps.write('.')
     .pipe gulp.dest(paths.build.scripts)
 
   # TODO: ES6 via Babel
   plugins.mergeStream svgs, afterFile, coffeeScriptFiles
 
+compileVendorScripts = ->
+  plugins.mergeStream(
+
+    # Copy Vendor Scripts
+    gulp.src "#{paths.scripts.vendor}/**/*.js"
+      .pipe plugins.sourcemaps.init()
+      .pipe plugins.sourcemaps.write('.')
+      .pipe gulp.dest("#{paths.build.scripts}/vendor")
+
+    # Compile and Copy Vendor CoffeeScripts
+    gulp.src "#{paths.scripts.vendor}/**/*.coffee"
+      .pipe plugins.plumber(options.plumber)
+      .pipe plugins.coffee()
+      .pipe plugins.sourcemaps.init()
+      .pipe plugins.sourcemaps.write('.')
+      .pipe gulp.dest("#{paths.build.scripts}/vendor")
+
+    # Copy jQuery from Package
+    gulp.src 'node_modules/jquery/dist/jquery.js'
+      .pipe plugins.sourcemaps.init()
+      .pipe plugins.sourcemaps.write('.')
+      .pipe gulp.dest("#{paths.build.scripts}/vendor")
+
+    # Copy jQuery UI Widget Factory from Package
+    gulp.src 'node_modules/jquery-ui/ui/widget.js'
+      .pipe plugins.sourcemaps.init()
+      .pipe plugins.rename('jquery.widget.js')
+      .pipe plugins.sourcemaps.write('.')
+      .pipe gulp.dest("#{paths.build.scripts}/vendor")
+
+  )
+
+concatenateVendorScripts = ->
+  scriptsToConcatenate = [
+    "#{paths.build.scripts}/vendor/**/*.js"
+    "!#{paths.build.scripts}/vendor/**/*.min.js"
+  ]
+  gulp.src scriptsToConcatenate
+    .pipe plugins.sourcemaps.init()
+    .pipe plugins.concat('cyclops.vendor.js')
+    .pipe plugins.sourcemaps.write('.')
+    .pipe gulp.dest(paths.build.scripts)
+
+concatenateScripts = ->
+  scriptsToConcatenate = [
+    "#{paths.build.scripts}/cyclops.vendor.js"
+    "#{paths.build.scripts}/cyclops.core.js"
+  ]
+  gulp.src scriptsToConcatenate
+    .pipe plugins.sourcemaps.init()
+    .pipe plugins.concat('cyclops.js')
+    .pipe plugins.sourcemaps.write('.')
+    .pipe gulp.dest(paths.build.scripts)
+
 optimizeScripts = ->
-  gulp.src "#{paths.build.scripts}/cyclops.js"
+  gulp.src [ "#{paths.build.scripts}/**/*.js", "!#{paths.build.scripts}/**/*.min.js" ]
     .pipe plugins.plumber(options.plumber)
     .pipe plugins.sourcemaps.init()
     .pipe plugins.uglify()
@@ -174,6 +229,18 @@ compileStyles = ->
     .pipe plugins.sourcemaps.write('.')
     .pipe gulp.dest(paths.build.styles)
 
+compileVendorStyles = (done) ->
+  # TODO Implement this...
+  done()
+
+concatenateVendorStyles = (done) ->
+  # TODO Implement this...
+  done()
+
+concatenateStyles = (done) ->
+  # TODO Implement this...
+  done()
+
 optimizeStyles = ->
   gulp.src [ "#{paths.build.styles}/**/*.css", "!#{paths.build.styles}/**/*.css" ]
     .pipe plugins.sourcemaps.init()
@@ -181,64 +248,6 @@ optimizeStyles = ->
     .pipe plugins.rename(suffix: '.min')
     .pipe plugins.sourcemaps.write('.')
     .pipe gulp.dest(paths.build.styles)
-
-# Vendor Dependencies ----------------------------------------------------------
-
-cleanVendor = ->
-  del [ paths.scripts.vendor, paths.styles.vendor ]
-
-compileVendorScripts = ->
-  plugins.mergeStream(
-
-    # Copy Vendor Scripts
-    gulp.src "#{paths.scripts.vendor}/**/*.js"
-      .pipe plugins.sourcemaps.init()
-      .pipe plugins.sourcemaps.write('.')
-      .pipe gulp.dest("#{paths.build.scripts}/vendor")
-
-    # Compile and Copy Vendor CoffeeScripts
-    gulp.src "#{paths.scripts.vendor}/**/*.coffee"
-      .pipe plugins.plumber(options.plumber)
-      .pipe plugins.coffee()
-      .pipe plugins.sourcemaps.init()
-      .pipe plugins.sourcemaps.write('.')
-      .pipe gulp.dest("#{paths.build.scripts}/vendor")
-
-    # Copy jQuery
-    gulp.src 'node_modules/jquery/dist/jquery.js'
-      .pipe plugins.sourcemaps.init()
-      .pipe plugins.sourcemaps.write('.')
-      .pipe gulp.dest("#{paths.build.scripts}/vendor")
-
-    # Copy Widget Factory from jQuery UI
-    gulp.src 'node_modules/jquery-ui/ui/widget.js'
-      .pipe plugins.sourcemaps.init()
-      .pipe plugins.rename('jquery.widget.js')
-      .pipe plugins.sourcemaps.write('.')
-      .pipe gulp.dest("#{paths.build.scripts}/vendor")
-
-  )
-
-optimizeVendorScripts = ->
-  gulp.src [ "#{paths.build.scripts}/vendor/**/*.js", "!#{paths.build.scripts}/vendor/**/*.min.js" ]
-    .pipe plugins.sourcemaps.init()
-    .pipe plugins.uglify()
-    .pipe plugins.rename(suffix: '.min')
-    .pipe plugins.sourcemaps.write('.')
-    .pipe gulp.dest("#{paths.build.scripts}/vendor")
-
-compileVendorStyles = ->
-  # TODO: Implement
-
-optimizeVendorStyles = ->
-  # TODO: Implement
-
-gulp.task 'vendor',
-  gulp.series(
-    cleanVendor
-    gulp.parallel(compileVendorScripts) # , compileVendorStyles)
-    gulp.parallel(optimizeVendorScripts) # , optimizeVendorStyles)
-  )
 
 # Development Workflow ---------------------------------------------------------
 
@@ -312,10 +321,22 @@ cleanAllDistributions = ->
   del paths.distribution.base
 
 createDistribution = ->
+  plugins.mergeStream(
 
-  # Copy Website to Distribution Output
-  gulp.src "#{paths.build.website}/**/*"
-    .pipe gulp.dest("#{paths.distribution.base}/#{pkg.version}")
+    # Copy Website to Distribution Output
+    gulp.src "#{paths.build.website}/**/*"
+      .pipe gulp.dest("#{paths.distribution.base}/#{pkg.version}")
+
+    # Concatenate Scripts
+    gulp.src "#{paths.build.scripts}"
+      .pipe plugins.sourcemaps.init()
+      .pipe plugins.concat('cyclops.js')
+      .pipe plugins.sourcemaps.write('.')
+
+    # Concatenate Styles
+    gulp.src "#{paths.build.styles}"
+
+  )
 
 # Tests ------------------------------------------------------------------------
 
@@ -359,20 +380,18 @@ runTestsInBrowsers = ->
 
 # Tasks ------------------------------------------------------------------------
 
-gulp.task 'clean', gulp.series(cleanAssets, cleanScripts, cleanStyles, cleanVendor, cleanWebsite, cleanTests, cleanDistribution)
+gulp.task 'clean', gulp.series(cleanAssets, cleanScripts, cleanStyles, cleanTests, cleanWebsite)
 
-gulp.task 'compile', gulp.series('clean', compileAssets, gulp.parallel(compileVendorScripts, compileScripts, compileStyles), compileWebsite)
+gulp.task 'compile', gulp.series('clean', gulp.parallel(compileAssets, compileVendorScripts, compileScripts, compileVendorStyles, compileStyles), concatenateVendorScripts, concatenateScripts, concatenateVendorStyles, concatenateStyles, compileWebsite)
 
 gulp.task 'test', gulp.series('compile', compileTests, runTests)
 
 gulp.task 'test-browsers', gulp.series('compile', compileTests, runTestsInBrowsers)
 
-gulp.task 'optimize', gulp.series('compile', optimizeAssets, gulp.parallel(optimizeVendorScripts, optimizeScripts, optimizeStyles, optimizeVendorScripts))
+gulp.task 'optimize', gulp.series('compile', gulp.parallel(optimizeAssets, optimizeScripts, optimizeStyles))
 
-gulp.task 'dist', gulp.series('optimize', createDistribution)
+gulp.task 'distribute', gulp.series('optimize', cleanDistribution, createDistribution)
 
-gulp.task 'watch', gulp.series('compile', watch)
-
-gulp.task 'serve', gulp.parallel('watch', serve)
+gulp.task 'serve', gulp.series('compile', gulp.parallel(watch, serve))
 
 gulp.task 'default', gulp.series('serve')

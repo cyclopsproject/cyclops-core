@@ -12,13 +12,11 @@
     "web"
   ],
   "scripts": {
-    "clean": "gulp clean",
     "compile": "gulp compile",
-    "dist": "gulp dist",
+    "dist": "gulp distribute",
     "gulp": "./node_modules/gulp/bin/gulp.js",
     "start": "gulp serve",
-    "test": "gulp test",
-    "watch": "gulp watch"
+    "test": "gulp test"
   },
   "author": "CenturyLink Cloud",
   "contributors": [
@@ -49,7 +47,7 @@
     "gulp-autoprefixer": "^3.1.1",
     "gulp-clean-css": "^2.0.13",
     "gulp-coffee": "^2.3.2",
-    "gulp-concat": "^2.6.0",
+    "gulp-concat": "^2.6.1",
     "gulp-inject": "^4.1.0",
     "gulp-karma-runner": "^1.2.0",
     "gulp-less": "^3.2.0",
