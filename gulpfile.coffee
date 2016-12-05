@@ -293,7 +293,7 @@ compileWebsite = ->
 
     # Copy Website Images
     gulp.src "#{paths.website.base}/images/**/*"
-      .pipe gulp.dest("#{paths.build.website}/img")
+      .pipe gulp.dest("#{paths.build.website}/images")
 
     # Symlink Styles and Scripts
     # TODO: Make the server support serving from these paths without symlinks
