@@ -43,21 +43,20 @@ $.widget 'cylops.toggle',
     this.element.prop 'disabled', this.options.defaults.disabled
     if this.options.defaults.disabled
       this.container.addClass 'disabled'
-    if this.options.onChange
-      this.element.on 'change', (event) =>
-        element = event.target
-        this.options.onChange(element.checked)
+    this.element.on 'change.cyclops', (event) =>
+      element = event.target
+      this._trigger 'change', null, { checked: element.checked }
 
   _destroy: ->
     this._super()
-    this.element.off 'change'
+    this.element.off '.cyclops'
     this.element.insertBefore this.container
     this.container.remove()
     return this
 
   _setChecked: (checked) ->
     this.element.prop('checked', checked)
-    # this._trigger 'valueChange', null, {value: value}
+    this._trigger 'change', null, { checked: checked }
 
   checked: (checked) ->
     unless checked is undefined

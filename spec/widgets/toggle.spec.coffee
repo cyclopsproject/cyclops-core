@@ -37,7 +37,7 @@ describe 'Widgets: Toggle', ->
 
   describe 'Cleanup', ->
 
-    xit 'destroys', ->
+    it 'destroys', ->
       toggleWidget = this.element.toggle()
       # TODO: There's probably a better check to see that the widget is destroyed
       expect(toggleWidget.toggle('destroy'))
@@ -73,13 +73,15 @@ describe 'Widgets: Toggle', ->
 
   describe 'Events', ->
 
-    it 'calls the onChange callback for change events', ->
-      this.element.toggle(onChange: this.onChangeHandler)
+    it 'triggers the change event for input change events', ->
+      this.element.toggle(change: this.onChangeHandler)
       this.element.prop('checked', true)
       this.element.trigger('change')
-      expect(this.onChangeHandler).toHaveBeenCalledWith(true)
+      expect(this.onChangeHandler).toHaveBeenCalled()
+      expect(this.onChangeHandler.calls.mostRecent().args[1]).toEqual({ checked: true })
 
-    it 'calls the onChange callback for click events', ->
-      this.element.toggle(onChange: this.onChangeHandler)
+    it 'calls the change event for click events', ->
+      this.element.toggle(change: this.onChangeHandler)
       this.element.trigger('click')
-      expect(this.onChangeHandler).toHaveBeenCalledWith(true)
+      expect(this.onChangeHandler).toHaveBeenCalled()
+      expect(this.onChangeHandler.calls.mostRecent().args[1]).toEqual({ checked: true })
