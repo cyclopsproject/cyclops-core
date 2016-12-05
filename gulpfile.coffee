@@ -6,26 +6,23 @@
 #
 # ## Tasks
 #
-#   * `gulp serve` (default)
+#   * `gulp serve` (or `npm start`) will start the development server and watch
+#     for changes to files in the src folder.
 #
 #   * `gulp compile` will compile all of the assets, scripts, styles and website
 #      into the `build` folder. The website may be viewed by opening the
 #      `build/website/index.html` file.
 #
-#   * `gulp test`
+#   * `gulp test` (or `npm test`) will run through our automated test suite in
+#     a headless browser (PhantomJS) and report the results on the console.
 #
-#   * `gulp test-browsers`
+#   * `gulp test-browsers` will run through our automated test suite, just like
+#     `gulp test`, but it will run the suite in all of the installed browsers on
+#     your machine in addition to PhantomJS.
 #
 #   * `gulp distribute` will compile, optimize and package Cyclops for distribution
 #     in the `dist` folder. The current version in `package.json` will be used
 #     as the name of its containing folder in `dist`.
-#
-# ### Using With NPM
-#
-#   * `npm start`
-#   * `npm run compile`
-#   * `npm test`
-#   * `npm run dist`
 #
 
 # Dependencies -----------------------------------------------------------------
