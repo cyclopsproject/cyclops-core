@@ -6,9 +6,9 @@ $.widget 'cyclops.navbar',
     menu.attr 'aria-expanded', isVisible
     btn.attr 'aria-expanded', isVisible
     btn.on 'click.cyclops', (event) =>
-      this._toogle(event)
+      this._toggle(event)
 
-  _toogle: (event) ->
+  _toggle: (event) ->
     btn = $(event.target)
     menu = btn.parents('.navbar').find('.navbar-collapse')
     if menu.is(':visible')
