@@ -42,7 +42,7 @@
     "del": "^2.2.2",
     "event-stream": "^3.3.4",
     "express-hbs": "^0.8.4",
-    "gulp": "gulpjs/gulp#4.0",
+    "gulp": "github:gulpjs/gulp#4.0",
     "gulp-add-src": "^0.2.0",
     "gulp-autoprefixer": "^3.1.1",
     "gulp-clean-css": "^2.0.13",
