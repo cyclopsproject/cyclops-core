@@ -250,8 +250,8 @@ optimizeStyles = ->
 
 watch = ->
   isWatching = true
-  gulp.watch "{#{paths.styles.core},#{paths.styles.vendor},#{paths.styles.website}}/**/*", gulp.series(compileStyles)
-  gulp.watch "{#{paths.scripts.core},#{paths.scripts.vendor}}/**/*", gulp.series(compileScripts)
+  gulp.watch "{#{paths.styles.core},#{paths.styles.vendor},#{paths.styles.website}}/**/*", gulp.series(compileStyles, compileVendorStyles, concatenateVendorStyles)
+  gulp.watch "{#{paths.scripts.core},#{paths.scripts.vendor}}/**/*", gulp.series(compileVendorScripts, compileScripts, concatenateVendorScripts, concatenateScripts)
   gulp.watch "{#{paths.assets.base}}/**/*", gulp.series(compileAssets)
   gulp.watch "{#{paths.website.base}}/**/*", gulp.series(compileWebsite)
 
