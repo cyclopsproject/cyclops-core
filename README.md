@@ -23,7 +23,7 @@ The UI/UX Pattern Guide for the CenturyLink Platform.
 ```
 npm install coffee-script -g
 npm install
-npm run gulp dev
+npm start
 ```
 
 ## Credit
