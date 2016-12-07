@@ -9,6 +9,33 @@
     to provide a richer user experience.
   </p>
 
+  <!-- Copy Widget -->
+  <h4 id="copy">
+    <a href="#copy">Copy</a>
+    <a href="copy.html"><svg class="cyclops-icon" aria-hidden="true"><use xlink:href='#icon-api' /></svg></a>
+  </h4>
+  <div class="pl-example">
+    {{> forms/examples/custom-controls-toggle }}
+  </div>
+  <pre show-type>
+    <code class="html">
+&lt;input id="customToggle" type="checkbox" /&gt;
+    </code>
+    <code class="javascript">
+var toggleWidget = $("#customToggle").toggle({
+  onChange: function(event, data) {
+    // Called every time the checked state changes.
+  }
+});
+
+// Get the current checked state
+toggleNode.toggle("checked");
+
+// Set the state to checked
+toggleNode.toggle("checked", true);
+    </code>
+  </pre>
+
   <!-- Range Widget -->
   <h4 id="range">
     <a href="#range">Range</a>
