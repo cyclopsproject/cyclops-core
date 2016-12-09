@@ -2,31 +2,30 @@
 {{#contentFor "tabName"}}listview{{/contentFor}}
 {{!< layouts/components.html}}
 
-<div class="content-header">
-<h1>List View</h1>
+<h1 class="content-header">List View</h1>
 <p>List view provides built-in views for create, read, update, and delete (CRUD) operations, making them ideal for displaying many different types of user managable entities in the Control Portal (e.g. alerts policies, scheduled tasks).</p>
-</div>
+
 <section class="pl-section">
 
   <h3 id="markup"><a href="#markup">Basic Markup</a></h3>
-  <p>For the header, use the container class <code>.new-list-view-header</code>, and for each column, use an <code>&lt;h3&gt;</code> with <code>.col</code> and <code>.col-*</code> where <code>*</code> is the percentage width of the column in increments of 5%.</p>
+  <p>For the header, use the container class <code>.list-view-header</code>, and for each column, use an <code>&lt;h3&gt;</code> with <code>.col</code> and <code>.col-*</code> where <code>*</code> is the percentage width of the column in increments of 5%.</p>
 
-  <p>The body of the list view is a <code>&lt;ul&gt;</code> or <code>&lt;ol&gt;</code> with <code>.new-list-view</code> applied to it. Within each <code>&lt;li&gt;</code>, there should be a corresponding <code>&lt;div class=&quot;col col-*&quot;&gt;</code> for each column defined in <code>.new-list-view-header</code>.</p>
+  <p>The body of the list view is a <code>&lt;ul&gt;</code> or <code>&lt;ol&gt;</code> with <code>.list-view</code> applied to it. Within each <code>&lt;li&gt;</code>, there should be a corresponding <code>&lt;div class=&quot;col col-*&quot;&gt;</code> for each column defined in <code>.list-view-header</code>.</p>
 
-  <p>For list views without headers, include the modifier class <code>.new-list-view-no-header</code> in the <code>&lt;ul&gt;</code> or <code>&lt;ol&gt;</code>. This will add a top border to your list view.</p>
+  <p>For list views without headers, include the modifier class <code>.list-view-no-header</code> in the <code>&lt;ul&gt;</code> or <code>&lt;ol&gt;</code>. This will add a top border to your list view.</p>
   <div class="pl-example">
     {{> list-view/basic }}
   </div>
   <pre>
     <code class="html">
 &lt;!-- header of the list --&gt;
-&lt;div class=&quot;new-list-view-header&quot;&gt;
+&lt;div class=&quot;list-view-header&quot;&gt;
     &lt;h3 class=&quot;col col-25&quot;&gt;Header Column 1&lt;/h3&gt;
     &lt;h3 class=&quot;col col-25&quot;&gt;Header Column 2&lt;/h3&gt;
     &lt;h3 class=&quot;col col-50&quot;&gt;Header Column 3&lt;/h3&gt;
 &lt;/div&gt;
 &lt;!-- body of the list --&gt;
-&lt;ul class=&quot;new-list-view&quot;&gt;
+&lt;ul class=&quot;list-view&quot;&gt;
   &lt;li&gt;
     &lt;div class=&quot;list-view-item&quot;&gt;
       &lt;div class=&quot;col col-25&quot;&gt;Body Column 1&lt;/div&gt;
@@ -57,7 +56,7 @@
   </ul>
 
   <h4 id="loadingList">Loading Data</h4>
-  <p>Provide text and use a <code>&amp;hellip;</code> to indicate that data is loading in place by wrapping it inside a <code>.loading-list-view-items</code> item within the <code>.new-list-view</code>.</p>
+  <p>Provide text and use a <code>&amp;hellip;</code> to indicate that data is loading in place by wrapping it inside a <code>.loading-list-view-items</code> item within the <code>.list-view</code>.</p>
   <p>View the <a href="listview.html#interactiveExamples">interactive example of the list view</a> and refresh the page.</p>
   <div class="pl-example">
     {{> list-view/loading }}
@@ -71,7 +70,7 @@
   </pre>
 
   <h4 id="loadingError"><a href="#loadingError">Failed to Load Data</a></h4>
-  <p>Provide text to indicate that the data has failed to load inside a <code>.error-list-view-items</code> item within the <code>.new-list-view</code>. If possible, provide a link to retry loading the data.</p>
+  <p>Provide text to indicate that the data has failed to load inside a <code>.error-list-view-items</code> item within the <code>.list-view</code>. If possible, provide a link to retry loading the data.</p>
   <div class="pl-example">
     {{> list-view/loading-failed }}
   </div>
@@ -84,7 +83,7 @@
   </pre>
 
   <h4 id="emptyList"><a href="#emptyList">Empty List</a></h4>
-  <p>When a list view is empty, provide a way within the empty list to create whatever entity the list contains by defining the contents of a <code>.empty-list-view-item</code> item within the <code>.new-list-view</code>.</p>
+  <p>When a list view is empty, provide a way within the empty list to create whatever entity the list contains by defining the contents of a <code>.empty-list-view-item</code> item within the <code>.list-view</code>.</p>
   <div class="pl-example">
     {{> list-view/empty }}
   </div>
@@ -149,7 +148,7 @@
 
   <pre>
     <code class="html">
-&lt;ul class=&quot;new-list-view&quot;&gt;
+&lt;ul class=&quot;list-view&quot;&gt;
   &lt;li&gt;
     &lt;div class=&quot;list-view-item&quot;&gt;
       &lt;div class=&quot;col col-100&quot;&gt;Item&lt;/div&gt;
@@ -183,7 +182,7 @@
   </div>
   <pre>
     <code class="html">
-&lt;ul class=&quot;new-list-view&quot;&gt;
+&lt;ul class=&quot;list-view&quot;&gt;
   &lt;li&gt;
     &lt;div class=&quot;list-view-editable-item list-view-item-success&quot;&gt;
       &lt;div class=&quot;col col-100&quot;&gt;.list-view-item-success&lt;/div&gt;
@@ -211,18 +210,18 @@
 
 <section class="pl-section" id="rowStatus">
   <h3><a href="#rowStatus">Row Status</a></h3>
-  <p>To show the current state of list items (e.g. alert policies), add <code>.new-list-view-status</code> to modify both  <code>.new-list-view-header</code> and <code>.new-list-view</code> blocks. Then add <code>.status-warning</code> or <code>.status-danger</code> to the <code>&lt;li&gt;</code>. By default, each <code>&lt;li&gt;</code> will have a grey (or normal) state.</p>
+  <p>To show the current state of list items (e.g. alert policies), add <code>.list-view-status</code> to modify both  <code>.list-view-header</code> and <code>.list-view</code> blocks. Then add <code>.status-warning</code> or <code>.status-danger</code> to the <code>&lt;li&gt;</code>. By default, each <code>&lt;li&gt;</code> will have a grey (or normal) state.</p>
   <div class="pl-example">
     {{> list-view/status }}
   </div>
   <pre>
     <code class="html">
-&lt;div class=&quot;new-list-view-header new-list-view-status&quot;&gt;
+&lt;div class=&quot;list-view-header list-view-status&quot;&gt;
   &lt;h3 class=&quot;col col-35&quot;&gt;Server&lt;/h3&gt;
   &lt;h3 class=&quot;col col-35&quot;&gt;Policy&lt;/h3&gt;
   &lt;h3 class=&quot;col col-30&quot;&gt;Status&lt;/h3&gt;
 &lt;/div&gt;
-&lt;ul class=&quot;new-list-view new-list-view-status&quot;&gt;
+&lt;ul class=&quot;list-view list-view-status&quot;&gt;
   &lt;li class=&quot;status-danger&quot;&gt;
     &lt;div class=&quot;list-view-link-item&quot;&gt;
       &lt;div class=&quot;col col-35&quot;&gt;&lt;a href=&quot;#&quot;&gt;Server Name&lt;/a&gt;&lt;/div&gt;
@@ -267,7 +266,7 @@
   </div>
   <pre>
     <code class="html">
-&lt;ul class=&quot;new-list-view&quot;&gt;
+&lt;ul class=&quot;list-view&quot;&gt;
   &lt;li&gt;
     &lt;div class=&quot;list-view-item&quot;&gt;
       &lt;div class=&quot;col col-100&quot;&gt;Item&lt;/div&gt;
@@ -308,39 +307,39 @@
 
 <section class="pl-section" id="toolbar">
   <h3><a href="#toolbar">Toolbar</a></h3>
-  <p>The <code>.new-list-view-toolbar</code> is a container for block elements used for modifying or augmenting the view of items in a list view (e.g. create and filter). Wrap any text that follows a button with a <code>p</code> or <code>span</code> tag to provide padding on the left.</p>
+  <p>The <code>.list-view-toolbar</code> is a container for block elements used for modifying or augmenting the view of items in a list view (e.g. create and filter). Wrap any text that follows a button with a <code>p</code> or <code>span</code> tag to provide padding on the left.</p>
 
   <div class="pl-example">
     {{> list-view/toolbar }}
-    <div class="new-list-view-header">
+    <div class="list-view-header">
       <h3 class="col col-100">list view header&hellip;</h3>
     </div>
   </div>
   <pre>
     <code class="html">
-&lt;div class=&quot;new-list-view-toolbar&quot;&gt;
+&lt;div class=&quot;list-view-toolbar&quot;&gt;
   &lt;button class=&quot;btn btn-default&quot;&gt;create item&lt;/button&gt;
   &lt;span class=&quot;p-l-xs&quot;&gt;1 - 10 of 23 items&lt;/span&gt;
-  &lt;div class=&quot;new-list-view-toolbar-right&quot;&gt;
+  &lt;div class=&quot;list-view-toolbar-right&quot;&gt;
     ...
   &lt;/div&gt;
 &lt;/div&gt;
     </code>
   </pre>
 
-  <p>To add more visual emphasis to the toolbar, add the modifier class, <code>.new-list-view-toolbar--border</code> to add a border and background around the toolbar items.</p>
+  <p>To add more visual emphasis to the toolbar, add the modifier class, <code>.list-view-toolbar--border</code> to add a border and background around the toolbar items.</p>
   <div class="pl-example">
   {{> list-view/toolbar-border }}
-    <div class="new-list-view-header">
+    <div class="list-view-header">
       <h3 class="col col-100">list view header&hellip;</h3>
     </div>
   </div>
   <pre>
     <code class="html">
-&lt;div class=&quot;new-list-view-toolbar new-list-view-toolbar--border&quot;&gt;
+&lt;div class=&quot;list-view-toolbar list-view-toolbar--border&quot;&gt;
   &lt;button class=&quot;btn btn-default&quot;&gt;create item&lt;/button&gt;
   &lt;span class=&quot;p-l-xs&quot;&gt;1 - 10 of 23 items&lt;/span&gt;
-  &lt;div class=&quot;new-list-view-toolbar-right&quot;&gt;
+  &lt;div class=&quot;list-view-toolbar-right&quot;&gt;
     ...
   &lt;/div&gt;
 &lt;/div&gt;
@@ -350,14 +349,14 @@
 
 <section class="pl-section" id="nested">
   <h3><a href="#nested">Nested List View</a></h3>
-  <p>When it is necessary to display hierarchy (e.g. subaccounts, groups/servers), nest a <code>.new-list-view</code> immediately after the <code>.list-view-*-item</code> element. Then add <code>.col-indent</code> to the <code>.col</code> within the <code>&lt;li&gt;</code> in that should be indented.</p>
+  <p>When it is necessary to display hierarchy (e.g. subaccounts, groups/servers), nest a <code>.list-view</code> immediately after the <code>.list-view-*-item</code> element. Then add <code>.col-indent</code> to the <code>.col</code> within the <code>&lt;li&gt;</code> in that should be indented.</p>
   <p>Six levels of indentation is supported. </p>
   <div class="pl-example">
     {{> list-view/nested }}
   </div>
   <pre>
     <code class="html">
-&lt;ul class=&quot;new-list-view&quot;&gt;
+&lt;ul class=&quot;list-view&quot;&gt;
   &lt;li&gt;
     &lt;div class=&quot;list-view-editable-item&quot;&gt;
       &lt;div class=&quot;col col-10&quot;&gt;&lt;input type=&quot;checkbox&quot;&gt;&lt;/div&gt;
@@ -369,13 +368,13 @@
       &lt;div class=&quot;col col-10&quot;&gt;&lt;input type=&quot;checkbox&quot;&gt;&lt;/div&gt;
       &lt;div class=&quot;col col-90&quot;&gt;Level 1b&lt;/div&gt;
     &lt;/div&gt;
-    &lt;ul class=&quot;new-list-view&quot;&gt;
+    &lt;ul class=&quot;list-view&quot;&gt;
       &lt;li&gt;
         &lt;div class=&quot;list-view-editable-item&quot;&gt;
           &lt;div class=&quot;col col-10&quot;&gt;&lt;input type=&quot;checkbox&quot;&gt;&lt;/div&gt;
           &lt;div class=&quot;col col-90 col-indent&quot;&gt;Level 2a&lt;/div&gt;
         &lt;/div&gt;
-        &lt;ul class=&quot;new-list-view&quot;&gt;
+        &lt;ul class=&quot;list-view&quot;&gt;
           &lt;li&gt;
             &lt;div class=&quot;list-view-editable-item&quot;&gt;
               &lt;div class=&quot;col col-10&quot;&gt;&lt;input type=&quot;checkbox&quot;&gt;&lt;/div&gt;
@@ -405,19 +404,19 @@
 
 <section class="pl-section" id="responsive">
   <h3><a href="#responsive">Responsive List View</a></h3>
-  <p>To accomodate narrow viewports (i.e. phones), wrap list views in a <code>.new-list-view-responsive</code> div and one of the following classes to set the breakpoint. The <code>.new-list-view-toolbar-right</code> will also adhere to the breakpoint set by the classes below. At narrow/mobile viewport widths, all content within a <code>&lt;li&gt;</code> is indented to show hierarchy.</p>
+  <p>To accomodate narrow viewports (i.e. phones), wrap list views in a <code>.list-view-responsive</code> div and one of the following classes to set the breakpoint. The <code>.list-view-toolbar-right</code> will also adhere to the breakpoint set by the classes below. At narrow/mobile viewport widths, all content within a <code>&lt;li&gt;</code> is indented to show hierarchy.</p>
 
   <table class="table">
     <tr>
-      <td width="40%"><code>.new-list-view-responsive-sm</code></td>
+      <td width="40%"><code>.list-view-responsive-sm</code></td>
       <td>768px</td>
     </tr>
     <tr>
-      <td><code>.new-list-view-responsive-md</code></td>
+      <td><code>.list-view-responsive-md</code></td>
       <td>992px</td>
     </tr>
     <tr>
-      <td><code>.new-list-view-responsive-lg</code></td>
+      <td><code>.list-view-responsive-lg</code></td>
       <td>1200px</td>
     </tr>
   </table>
@@ -430,45 +429,45 @@
 
   <pre>
     <code class="html">
-&lt;div class=&quot;new-list-view-responsive new-list-view-responsive-sm&quot;&gt;
-  &lt;div class=&quot;new-list-view-toolbar&quot;&gt;
+&lt;div class=&quot;list-view-responsive list-view-responsive-sm&quot;&gt;
+  &lt;div class=&quot;list-view-toolbar&quot;&gt;
     &lt;button class=&quot;btn btn-primary&quot;&gt;create item&lt;/button&gt;
-    &lt;div class=&quot;new-list-view-toolbar-right&quot;&gt;
+    &lt;div class=&quot;list-view-toolbar-right&quot;&gt;
       ...
     &lt;/div&gt;
   &lt;/div&gt;
-  &lt;div class=&quot;new-list-view-header&quot;&gt;
-      &lt;h3 class=&quot;col col-25&quot;&gt;First Name&lt;/h3&gt;
-      &lt;h3 class=&quot;col col-25&quot;&gt;Last Name&lt;/h3&gt;
-      &lt;h3 class=&quot;col col-50&quot;&gt;Username&lt;/h3&gt;
+  &lt;div class=&quot;list-view-header&quot;&gt;
+  	&lt;h3 class=&quot;col col-25&quot;&gt;Level&lt;/h3&gt;
+  	&lt;h3 class=&quot;col col-25&quot;&gt;Alias&lt;/h3&gt;
+  	&lt;h3 class=&quot;col col-50&quot;&gt;Location&lt;/h3&gt;
   &lt;/div&gt;
-  &lt;ul class=&quot;new-list-view&quot;&gt;
+  &lt;ul class=&quot;list-view&quot;&gt;
     &lt;li&gt;
       &lt;div class=&quot;list-view-item&quot;&gt;
-        &lt;div class=&quot;col col-25&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Account&lt;/span&gt;ACME Inc.&lt;/div&gt;
+        &lt;div class=&quot;col col-25&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Level&lt;/span&gt;Level 1a&lt;/div&gt;
         &lt;div class=&quot;col col-25&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Alias&lt;/span&gt;ACME&lt;/div&gt;
         &lt;div class=&quot;col col-50&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Location&lt;/span&gt;US West&lt;/div&gt;
       &lt;/div&gt;
-      &lt;ul class=&quot;new-list-view&quot;&gt;
+      &lt;ul class=&quot;list-view&quot;&gt;
         &lt;li&gt;
           &lt;div class=&quot;list-view-item&quot;&gt;
-            &lt;div class=&quot;col col-25 col-indent&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Account&lt;/span&gt;ACME Sub 1 Inc.&lt;/div&gt;
+            &lt;div class=&quot;col col-25 col-indent&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Level&lt;/span&gt;Level 2a&lt;/div&gt;
             &lt;div class=&quot;col col-25&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Alias&lt;/span&gt;ACM1&lt;/div&gt;
             &lt;div class=&quot;col col-50&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Location&lt;/span&gt;US West&lt;/div&gt;
-          &lt;/div&gt;
-            &lt;ul class=&quot;new-list-view&quot;&gt;
-              &lt;li&gt;
-                &lt;div class=&quot;list-view-item&quot;&gt;
-                  &lt;div class=&quot;col col-25 col-indent&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Account&lt;/span&gt;ACME 3 Inc.&lt;/div&gt;
-                  &lt;div class=&quot;col col-25&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Alias&lt;/span&gt;ACM3&lt;/div&gt;
-                  &lt;div class=&quot;col col-50&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Location&lt;/span&gt;US West&lt;/div&gt;
-                &lt;/div&gt;
-              &lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
+            &lt;/div&gt;
+            &lt;ul class=&quot;list-view&quot;&gt;
+            &lt;li&gt;
+              &lt;div class=&quot;list-view-item&quot;&gt;
+                &lt;div class=&quot;col col-25 col-indent&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Level&lt;/span&gt;Level 3&lt;/div&gt;
+                &lt;div class=&quot;col col-25&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Alias&lt;/span&gt;ACM3&lt;/div&gt;
+                &lt;div class=&quot;col col-50&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Location&lt;/span&gt;US West&lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/li&gt;
         &lt;li&gt;
           &lt;div class=&quot;list-view-item&quot;&gt;
-            &lt;div class=&quot;col col-25 col-indent&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Account&lt;/span&gt;ACME Sub 2 Inc.&lt;/div&gt;
+            &lt;div class=&quot;col col-25 col-indent&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Level&lt;/span&gt;Level 2b&lt;/div&gt;
             &lt;div class=&quot;col col-25&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Alias&lt;/span&gt;ACM2&lt;/div&gt;
             &lt;div class=&quot;col col-50&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Location&lt;/span&gt;US West&lt;/div&gt;
           &lt;/div&gt;
@@ -477,7 +476,7 @@
     &lt;/li&gt;
     &lt;li&gt;
       &lt;div class=&quot;list-view-item&quot;&gt;
-        &lt;div class=&quot;col col-25&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Account&lt;/span&gt;Rick James Productions&lt;/div&gt;
+        &lt;div class=&quot;col col-25&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Level&lt;/span&gt;Level 1b&lt;/div&gt;
         &lt;div class=&quot;col col-25&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Alias&lt;/span&gt;RJP&lt;/div&gt;
         &lt;div class=&quot;col col-50&quot;&gt;&lt;span class=&quot;col-header&quot;&gt;Location&lt;/span&gt;US East&lt;/div&gt;
       &lt;/div&gt;

@@ -1,4 +1,4 @@
-.new-list-view-header {
+.list-view-header {
   background-color: @gray-100;
   box-sizing: border-box;
   padding: 6px 0;
@@ -50,12 +50,12 @@
     border-bottom: 2px solid @border-color;
   }
 
-  &.new-list-view-status {
+  &.list-view-status {
     padding-left: 15px;
   }
 }
 
-.new-list-view {
+.list-view {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -105,13 +105,13 @@
         border-bottom-color: @state-danger-border;
       }
 
-      .new-list-view-actions {
+      .list-view-actions {
         text-align: right;
         opacity: 0;
         transition: e('opacity .1s linear');
       }
 
-      &:hover .new-list-view-actions {
+      &:hover .list-view-actions {
         opacity: 1;
       }
     }
@@ -247,7 +247,7 @@
   }
 }
 
-.new-list-view-status {
+.list-view-status {
 
   > li {
 
@@ -273,7 +273,7 @@
   }
 }
 
-.new-list-view-no-header {
+.list-view-no-header {
   > li:first-child {
     border-top: 1px solid @border-color;
   }
@@ -558,11 +558,11 @@
   width: 100%;
 }
 
-.new-list-view-toolbar {
+.list-view-toolbar {
   line-height: 30px;
   margin-bottom: floor(@line-height-computed / 2);
 
-  .new-list-view-toolbar-right-collapsed();
+  .list-view-toolbar-right-collapsed();
 
   .btn,
   .dropdown {
@@ -575,7 +575,7 @@
 
   @media (min-width: @grid-float-breakpoint) {
 
-    .new-list-view-toolbar-right-expanded();
+    .list-view-toolbar-right-expanded();
 
     >.btn, > .dropdown {
       margin-bottom: 0;
@@ -584,60 +584,59 @@
   }
 }
 
-.new-list-view-toolbar--border {
+.list-view-toolbar--border {
   border: 2px solid @gray-100;
   background-color: #f9f9f9;
   padding: 15px 15px;
 }
 
-.new-list-view-responsive {
+.list-view-responsive {
   .col-header {
     display: none;
   }
-  .new-list-view-responsive-expanded();
+  .list-view-responsive-expanded();
 
   @media (max-width: 0) {
-    .new-list-view-responsive-collapsed();
-    .new-list-view-toolbar-right-collapsed();
+    .list-view-responsive-collapsed();
+    .list-view-toolbar-right-collapsed();
   }
 
-  &.new-list-view-responsive-sm {
-    .new-list-view-responsive-expanded();
-    .new-list-view-toolbar-right-expanded();
+  &.list-view-responsive-sm {
+    .list-view-responsive-expanded();
+    .list-view-toolbar-right-expanded();
 
     @media (max-width: @screen-xs-max) {
-      .new-list-view-responsive-collapsed();
-      .new-list-view-toolbar-right-collapsed();
+      .list-view-responsive-collapsed();
+      .list-view-toolbar-right-collapsed();
     }
   }
 
-  &.new-list-view-responsive-md {
-    .new-list-view-responsive-expanded();
-    .new-list-view-toolbar-right-expanded();
+  &.list-view-responsive-md {
+    .list-view-responsive-expanded();
+    .list-view-toolbar-right-expanded();
 
     @media (max-width: @screen-sm-max) {
-      .new-list-view-responsive-collapsed();
-      .new-list-view-toolbar-right-collapsed();
+      .list-view-responsive-collapsed();
+      .list-view-toolbar-right-collapsed();
     }
   }
 
-  &.new-list-view-responsive-lg {
-    .new-list-view-responsive-expanded();
-    .new-list-view-toolbar-right-expanded();
+  &.list-view-responsive-lg {
+    .list-view-responsive-expanded();
+    .list-view-toolbar-right-expanded();
 
     @media (max-width: @screen-md-max) {
-      .new-list-view-responsive-collapsed();
-      .new-list-view-toolbar-right-collapsed();
+      .list-view-responsive-collapsed();
+      .list-view-toolbar-right-collapsed();
     }
   }
 }
 
 // The classes bellow are not meant to be used...
 // they are meant to be included in other classes
-// go go less!
-.new-list-view-responsive-collapsed {
+.list-view-responsive-collapsed {
 
-  .new-list-view-toolbar-right-collapsed();
+  .list-view-toolbar-right-collapsed();
 
   > ul {
     border-top: solid 1px @border-color;
@@ -847,12 +846,12 @@
     cursor: default;
   }
 
-  .new-list-view-header {
+  .list-view-header {
     display: none;
   }
 }
 
-.new-list-view-responsive-expanded {
+.list-view-responsive-expanded {
   .col {
     display: block;
     float: left;
@@ -940,8 +939,8 @@
   }
 }
 
-.new-list-view-toolbar-right-expanded {
-  .new-list-view-toolbar-right {
+.list-view-toolbar-right-expanded {
+  .list-view-toolbar-right {
     float:right;
     margin-left: 20px;
     margin-top: 0;
@@ -952,8 +951,8 @@
   }
 }
 
-.new-list-view-toolbar-right-collapsed {
-  .new-list-view-toolbar-right {
+.list-view-toolbar-right-collapsed {
+  .list-view-toolbar-right {
     float: none;
     margin-left: 0;
 
