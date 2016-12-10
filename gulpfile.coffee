@@ -77,6 +77,9 @@ options =
   autoprefixer:
     browsers: [ 'ie >= 9', 'last 2 versions' ]
     cascade: false
+  babel:
+    plugins: [ 'transform-es2015-modules-umd' ]
+    presets: [ 'latest' ]
   sass:
     includePaths: [
       "#{__dirname}/#{paths.styles.core}",
@@ -123,31 +126,38 @@ cleanScripts = ->
 compileScripts = ->
   # inline icons SVGs
   # TODO: Move to assets tasks
-  svgs = gulp.src "#{paths.assets.icons}/**/*.svg"
-    .pipe plugins.rename(prefix: 'icon-')
-    .pipe plugins.svgmin()
-    .pipe plugins.svgstore(inlineSvg: true)
-
-  afterFile = gulp.src "#{paths.scripts.build}/after.js"
-    .pipe plugins.inject(svgs, {
-      name: 'icons',
-      transform: (filePath, file) ->
-        return file.contents.toString().replace(/"/g, '\\"')
-     })
+  # svgs = gulp.src "#{paths.assets.icons}/**/*.svg"
+  #   .pipe plugins.rename(prefix: 'icon-')
+  #   .pipe plugins.svgmin()
+  #   .pipe plugins.svgstore(inlineSvg: true)
+  #
+  # afterFile = gulp.src "#{paths.scripts.build}/after.js"
+  #   .pipe plugins.inject(svgs, {
+  #     name: 'icons',
+  #     transform: (filePath, file) ->
+  #       return file.contents.toString().replace(/"/g, '\\"')
+  #    })
 
   # CoffeeScript Files
-  coffeeScriptFiles = gulp.src "#{paths.scripts.core}/**/*.coffee"
-    .pipe plugins.plumber(options.plumber)
-    .pipe plugins.coffee(bare: true)
-    .pipe plugins.addSrc.prepend "#{paths.scripts.build}/before.js"
-    .pipe appendStream afterFile
+  # coffeeScriptFiles = gulp.src "#{paths.scripts.core}/**/*.coffee"
+  #   .pipe plugins.plumber(options.plumber)
+  #   .pipe plugins.coffee(bare: true)
+  #   .pipe plugins.addSrc.prepend "#{paths.scripts.build}/before.js"
+  #   .pipe appendStream afterFile
+  #   .pipe plugins.sourcemaps.init()
+  #   .pipe plugins.concat('cyclops.core.js')
+  #   .pipe plugins.sourcemaps.write('.')
+  #   .pipe gulp.dest(paths.build.scripts)
+
+  # TODO: ES6 via Babel
+  gulp.src "#{paths.scripts.core}/**/*.js"
     .pipe plugins.sourcemaps.init()
+    .pipe plugins.babel(options.babel)
     .pipe plugins.concat('cyclops.core.js')
     .pipe plugins.sourcemaps.write('.')
     .pipe gulp.dest(paths.build.scripts)
 
-  # TODO: ES6 via Babel
-  plugins.mergeStream svgs, afterFile, coffeeScriptFiles
+  # plugins.mergeStream svgs, afterFile, coffeeScriptFiles
 
 compileVendorScripts = ->
   plugins.mergeStream(
@@ -159,25 +169,25 @@ compileVendorScripts = ->
       .pipe gulp.dest("#{paths.build.scripts}/vendor")
 
     # Compile and Copy Vendor CoffeeScripts
-    gulp.src "#{paths.scripts.vendor}/**/*.coffee"
-      .pipe plugins.plumber(options.plumber)
-      .pipe plugins.coffee()
-      .pipe plugins.sourcemaps.init()
-      .pipe plugins.sourcemaps.write('.')
-      .pipe gulp.dest("#{paths.build.scripts}/vendor")
+    # gulp.src "#{paths.scripts.vendor}/**/*.coffee"
+    #   .pipe plugins.plumber(options.plumber)
+    #   .pipe plugins.coffee()
+    #   .pipe plugins.sourcemaps.init()
+    #   .pipe plugins.sourcemaps.write('.')
+    #   .pipe gulp.dest("#{paths.build.scripts}/vendor")
 
     # Copy jQuery from Package
-    gulp.src 'node_modules/jquery/dist/jquery.js'
-      .pipe plugins.sourcemaps.init()
-      .pipe plugins.sourcemaps.write('.')
-      .pipe gulp.dest("#{paths.build.scripts}/vendor")
+    # gulp.src 'node_modules/jquery/dist/jquery.js'
+    #   .pipe plugins.sourcemaps.init()
+    #   .pipe plugins.sourcemaps.write('.')
+    #   .pipe gulp.dest("#{paths.build.scripts}/vendor")
 
     # Copy jQuery UI Widget Factory from Package
-    gulp.src 'node_modules/jquery-ui/ui/widget.js'
-      .pipe plugins.sourcemaps.init()
-      .pipe plugins.rename('jquery.widget.js')
-      .pipe plugins.sourcemaps.write('.')
-      .pipe gulp.dest("#{paths.build.scripts}/vendor")
+    # gulp.src 'node_modules/jquery-ui/ui/widget.js'
+    #   .pipe plugins.sourcemaps.init()
+    #   .pipe plugins.rename('jquery.widget.js')
+    #   .pipe plugins.sourcemaps.write('.')
+    #   .pipe gulp.dest("#{paths.build.scripts}/vendor")
 
   )
 
@@ -194,7 +204,7 @@ concatenateVendorScripts = ->
 
 concatenateScripts = ->
   scriptsToConcatenate = [
-    "#{paths.build.scripts}/cyclops.vendor.js"
+    # "#{paths.build.scripts}/cyclops.vendor.js"
     "#{paths.build.scripts}/cyclops.core.js"
   ]
   gulp.src scriptsToConcatenate
@@ -341,8 +351,12 @@ cleanTests = ->
   del paths.build.tests
 
 compileTests = ->
-  gulp.src "#{paths.tests.base}/**/*.coffee"
-    .pipe plugins.coffee(bare: true)
+  # gulp.src "#{paths.tests.base}/**/*.coffee"
+  #   .pipe plugins.coffee(bare: true)
+  #   .pipe gulp.dest(paths.build.tests)
+
+  gulp.src "#{paths.tests.base}/**/*.js"
+    .pipe plugins.babel(options.babel)
     .pipe gulp.dest(paths.build.tests)
 
 runTests = ->
