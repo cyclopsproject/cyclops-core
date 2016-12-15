@@ -99,21 +99,21 @@ class Toggleable {
 //     else
 //       this.element.prop('checked')
 
-let toggleables = new Array();
-let initialize = function() {
-  let toggleableElements = [].slice.call(document.body.querySelectorAll('[data-behavior="toggleable"]')); // the [].slice.call(...) is for NodeList.forEach compatibility...
-  // let toggleables = new Array();
-
-  console.log('[Toggleable] Elements', toggleableElements);
-
-  toggleableElements.forEach((toggleableElement) => {
-    let toggleable = new Toggleable(toggleableElement);
-    toggleables.push(toggleable);
-  });
-
-  console.info('[Toggleable] Instances:', toggleables);
-};
-
-document.addEventListener('DOMContentLoaded', initialize);
+// let toggleables = new Array();
+// let initialize = function() {
+//   let toggleableElements = [].slice.call(document.body.querySelectorAll('[data-behavior="toggleable"]')); // the [].slice.call(...) is for NodeList.forEach compatibility...
+//   // let toggleables = new Array();
+//
+//   console.log('[Toggleable] Elements', toggleableElements);
+//
+//   toggleableElements.forEach((toggleableElement) => {
+//     let toggleable = new Toggleable(toggleableElement);
+//     toggleables.push(toggleable);
+//   });
+//
+//   console.info('[Toggleable] Instances:', toggleables);
+// };
+//
+// document.addEventListener('DOMContentLoaded', initialize);
 
 export default Toggleable;
