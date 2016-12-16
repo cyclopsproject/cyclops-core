@@ -1,7 +1,6 @@
 class Toggleable {
 
   constructor(element, options = {}) {
-    console.log('element', element);
     if (element.tagName !== 'INPUT' && element.type !== 'checkbox') {
       throw ('Toggleable may only be used with <input type="checkbox"> elements!');
     }
