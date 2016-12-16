@@ -76,5 +76,5 @@
     "streamqueue": "^1.1.1",
     "through2": "^2.0.1"
   },
-  "main": "build/scripts/cyclops.js"
+  "main": "src/scripts/cyclops.js"
 }
