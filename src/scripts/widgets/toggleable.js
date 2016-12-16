@@ -116,4 +116,5 @@ class Toggleable {
 // document.addEventListener('DOMContentLoaded', initialize);
 
 export { Toggleable };
+
 export default Toggleable;

@@ -100,4 +100,6 @@ class Copyable {
 //
 // document.addEventListener('DOMContentLoaded', initialize);
 
+export { Copyable };
+
 export default Copyable;

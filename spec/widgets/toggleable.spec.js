@@ -1,4 +1,4 @@
-import Toggleable from '../../src/scripts/widgets/toggleable';
+import { Toggleable } from '../../src/scripts/widgets/toggleable';
 
 describe('Widgets: Toggle', function() {
 
