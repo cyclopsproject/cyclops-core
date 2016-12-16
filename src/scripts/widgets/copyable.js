@@ -84,20 +84,20 @@ class Copyable {
 
 }
 
-let initialize = function() {
-  let copyableElements = [].slice.call(document.body.querySelectorAll('[data-behavior="copyable"]')); // the [].slice.call(...) is for NodeList.forEach compatibility...
-  let copyables = new Array();
-
-  console.log('[Copyable] Elements', copyableElements);
-
-  copyableElements.forEach((copyableElement) => {
-    let copyable = new Copyable(copyableElement);
-    copyables.push(copyable);
-  });
-
-  console.info('[Copyable] Instances:', copyables);
-};
-
-document.addEventListener('DOMContentLoaded', initialize);
+// let initialize = function() {
+//   let copyableElements = [].slice.call(document.body.querySelectorAll('[data-behavior="copyable"]')); // the [].slice.call(...) is for NodeList.forEach compatibility...
+//   let copyables = new Array();
+//
+//   console.log('[Copyable] Elements', copyableElements);
+//
+//   copyableElements.forEach((copyableElement) => {
+//     let copyable = new Copyable(copyableElement);
+//     copyables.push(copyable);
+//   });
+//
+//   console.info('[Copyable] Instances:', copyables);
+// };
+//
+// document.addEventListener('DOMContentLoaded', initialize);
 
 export default Copyable;
