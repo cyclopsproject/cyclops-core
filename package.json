@@ -16,6 +16,7 @@
     "compile": "gulp compile",
     "dist": "gulp distribute",
     "gulp": "./node_modules/gulp/bin/gulp.js",
+    "release": "gulp release",
     "start": "gulp serve",
     "test": "gulp test"
   },

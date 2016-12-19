@@ -95,17 +95,20 @@ const paths = {
   },
   distribution: {
     base: 'dist'
+  },
+  releases: {
+    base: 'releases'
   }
 };
 
 const options = {
   autoprefixer: {
-    browsers: ['ie >= 9', 'last 2 versions'],
+    browsers: [ 'ie >= 9', 'last 2 versions' ],
     cascade: false
   },
   babel: {
-    plugins: ['transform-es2015-modules-umd'],
-    presets: ['latest']
+    plugins: [ 'transform-es2015-modules-umd' ],
+    presets: [ 'latest']
   },
   sass: {
     includePaths: [ `${__dirname}/${paths.styles.core}`, `${__dirname}/${paths.styles.website}` ]
@@ -331,10 +334,6 @@ function compileWebsite() {
 // Distribution ----------------------------------------------------------------
 
 function cleanDistribution() {
-  return del(paths.distribution.base + "/" + pkg.version);
-};
-
-function cleanAllDistributions() {
   return del(paths.distribution.base);
 };
 
@@ -343,7 +342,7 @@ function createDistribution() {
 
     // Copy Website to Distribution Output
     gulp.src(`${paths.build.website}/**/*`)
-      .pipe(gulp.dest(`${paths.distribution.base}/${pkg.version}`)),
+      .pipe(gulp.dest(paths.distribution.base)),
 
     // Concatenate Scripts
     gulp.src(paths.build.scripts)
@@ -355,6 +354,24 @@ function createDistribution() {
     gulp.src(paths.build.styles)
 
   );
+};
+
+// Release ----------------------------------------------------------------
+
+function cleanRelease() {
+  return del(`${paths.releases.base}/${pkg.version}`);
+};
+
+function cleanAllReleases() {
+  return del(paths.releases.base);
+};
+
+function createRelease() {
+
+  // Copy Distribution Output to Versioned Release Folder
+  return gulp.src(`${paths.distribution.base}/**/*`)
+    .pipe(gulp.dest(`${paths.releases.base}/${pkg.version}`));
+
 };
 
 // Tests -----------------------------------------------------------------------
@@ -409,10 +426,11 @@ const test = gulp.series(compile, compileTests, runTests);
 const testBrowsers = gulp.series(compile, compileTests, runTestsInBrowsers);
 const optimize = gulp.series(compile, gulp.parallel(optimizeAssets, optimizeScripts, optimizeStyles));
 const distribute = gulp.series(optimize, cleanDistribution, createDistribution);
+const release = gulp.series(distribute, cleanRelease, createRelease);
 const serve = gulp.series(compile, gulp.parallel(watchForChanges, runWebServer));
 
 export {
-  clean, compile, test, testBrowsers, optimize, distribute, serve
+  clean, compile, distribute, optimize, release, serve, test, testBrowsers
 };
 
 export default serve;
