@@ -112,19 +112,6 @@
   }
 }
 
-// Tags
-
-@mixin tag-variant($color) {
-  background-color: $color;
-
-  &[href] {
-    &:hover,
-    &:focus {
-      background-color: darken($color, 10%);
-    }
-  }
-}
-
 // Horizontal dividers
 //
 // Dividers (basically an hr) within dropdowns and nav lists
