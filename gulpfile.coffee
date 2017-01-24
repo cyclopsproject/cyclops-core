@@ -77,8 +77,8 @@ options =
   autoprefixer:
     browsers: [ 'ie >= 9', 'last 2 versions' ]
     cascade: false
-  less:
-    paths: [
+  sass:
+    includePaths: [
       "#{__dirname}/#{paths.styles.core}",
       "#{__dirname}/#{paths.styles.website}"
     ]
@@ -218,10 +218,10 @@ cleanStyles = ->
   del paths.build.styles
 
 compileStyles = ->
-  gulp.src [ "#{paths.styles.core}/cyclops.less", "#{paths.styles.website}/site.less" ]
+  gulp.src [ "#{paths.styles.core}/cyclops.scss", "#{paths.styles.website}/site.scss" ]
     .pipe plugins.plumber(options.plumber)
     .pipe plugins.sourcemaps.init()
-    .pipe plugins.less(options.less)
+    .pipe plugins.sass(options.sass)
     .pipe plugins.autoprefixer(options.autoprefixer)
     .pipe plugins.sourcemaps.write('.')
     .pipe gulp.dest(paths.build.styles)
