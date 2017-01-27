@@ -21,8 +21,11 @@
 //     on your machine in addition to PhantomJS.
 //
 //   * `gulp distribute` will compile, optimize and package Cyclops for
-//     distribution in the `dist` folder. The current version in `package.json`
-//     will be used as the name of its containing folder in `dist`.
+//     distribution in the `dist` folder.
+//
+//   * `gulp release` will compile, optimize and package Cyclops for release
+//     in the `releases` folder. The current version in `package.json` will be
+//     used as the name of its containing folder in `releases`.
 //
 
 // Dependencies ----------------------------------------------------------------
@@ -129,6 +132,15 @@ const options = {
       } else {
         throw error;
       }
+    }
+  },
+  webpack: {
+    module: {
+      loaders: [
+        {
+          loader: 'babel-loader'
+        }
+      ]
     }
   }
 };
@@ -387,18 +399,17 @@ function compileTests() {
 };
 
 function runTests() {
-  return gulp.src(`${paths.build.tests}/**/*.spec.js`)
+  return gulp.src(`${paths.tests.base}/**/*.spec.js`)
     .pipe(karmaRunner.server({
-      'singleRun': true,
-      'frameworks': ['jasmine'],
-      'browsers': ['PhantomJS'],
-      'reporters': ['verbose'],
-      files: [
-        `${paths.build.scripts}/vendor/**/*.js`,
-        `${paths.build.scripts}/cyclops.js`,
-        `${paths.build.tests}/helpers/**/*.js`,
-        `${paths.build.tests}/**/*.spec.js`
-      ]
+      singleRun: true,
+      frameworks: [ 'jasmine' ],
+      browsers: [ 'PhantomJS' ],
+      reporters: [ 'verbose' ],
+      preprocessors: {
+				'spec/**/*.spec.js': [ 'webpack' ],
+        'src/**/*.js': [ 'webpack' ]
+			},
+      webpack: options.webpack
   }));
 };
 
@@ -406,15 +417,9 @@ function runTestsInBrowsers() {
   return gulp.src(`${paths.build.tests}/**/*.spec.js`)
     .pipe(karmaRunner.server({
       'singleRun': false,
-      'frameworks': ['jasmine'],
-      'browsers': ['PhantomJS', 'Chrome', 'Safari', 'Firefox'],
-      'reporters': ['verbose', 'kjhtml'],
-      files: [
-        `${paths.build.scripts}/vendor/**/*.js`,
-        `${paths.build.scripts}/cyclops.js`,
-        `${paths.build.tests}/helpers/**/*.js`,
-        `${paths.build.tests}/**/*.spec.js`
-      ]
+      'frameworks': [ 'jasmine' ],
+      'browsers': [ 'PhantomJS', 'Chrome', 'Safari', 'Firefox' ],
+      'reporters': [ 'verbose', 'kjhtml' ]
   }));
 };
 
