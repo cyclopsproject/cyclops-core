@@ -414,12 +414,17 @@ function runTests() {
 };
 
 function runTestsInBrowsers() {
-  return gulp.src(`${paths.build.tests}/**/*.spec.js`)
+  return gulp.src(`${paths.tests.base}/**/*.spec.js`)
     .pipe(karmaRunner.server({
       'singleRun': false,
       'frameworks': [ 'jasmine' ],
       'browsers': [ 'PhantomJS', 'Chrome', 'Safari', 'Firefox' ],
-      'reporters': [ 'verbose', 'kjhtml' ]
+      'reporters': [ 'verbose', 'kjhtml' ],
+      preprocessors: {
+        'spec/**/*.spec.js': [ 'webpack' ],
+        'src/**/*.js': [ 'webpack' ]
+      },
+      webpack: options.webpack
   }));
 };
 

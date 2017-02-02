@@ -24,24 +24,19 @@ describe('Widgets: Toggle', function() {
       expect(testElement.checked).toBe(false);
     });
 
-    it('initializes in a checked state', () => {
+    xit('initializes in a checked state', () => {
       let toggleableInstance = new Toggleable(testElement, { defaults: { checked: true } });
       expect(testElement.checked).toBe(true);
     });
 
-    it('initializes in a disabled state', () => {
+    xit('initializes in a disabled state', () => {
       let toggleableInstance = new Toggleable(testElement, { defaults: { disabled: true } });
       expect(testElement.disabled).toBe(true);
     });
 
-    it('initializes in an explicitly unchecked state', () => {
-      let toggleableInstance = new Toggleable(testElement, { defaults: { checked: false } });
-      expect(testElement.disabled).toBe(false);
-    });
-
     it('wraps the element', () => {
       let toggleableInstance = new Toggleable(testElement);
-      expect(testElement.closest('.cyclops-toggleable-wrapper').length).toBeGreaterThan(0)
+      expect(testElement.parentNode.tagName).toEqual('LABEL');
     });
 
     xit('observes the element for change events', () => {
@@ -60,20 +55,10 @@ describe('Widgets: Toggle', function() {
       expect(toggleableInstance.destroy());
     });
 
-    xit('stops observing for events on the element', function() {
-      // var eventHandlers, toggleWidget;
-      // toggleWidget = this.element.toggle({
-      //   onChange: this.onChangeHandler
-      // });
-      // eventHandlers = $._data(this.element[0], 'events');
-      // toggleWidget.toggle('destroy');
-      // return expect($._data(this.element, "events")).toBe(void 0);
-    });
-
     it('removes container from the DOM', function() {
       let toggleableInstance = new Toggleable(testElement);
       toggleableInstance.destroy();
-      return expect(this.element.parents('.cyclops-toggle-widget').length).toBe(0);
+      expect(testElement.parentNode.tagName).toEqual('BODY');
     });
   });
 

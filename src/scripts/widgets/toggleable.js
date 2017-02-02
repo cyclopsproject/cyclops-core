@@ -14,8 +14,14 @@ class Toggleable {
   }
 
   addEventListeners() {
-    let onChangeHandler = this.onChange.bind(this);
-    this.element.addEventListener('change', onChangeHandler);
+    this.onChangeBoundHandler = this.onChange.bind(this);
+    this.element.addEventListener('change', this.onChangeBoundHandler);
+  }
+
+  removeEventListeners() {
+    if (this.onChangeBoundHandler) {
+      this.element.removeEventListener('change', this.onChangeBoundHandler);
+    }
   }
 
   onChange(event) {
@@ -53,6 +59,12 @@ class Toggleable {
     } else {
       return this.element.checked = false;
     }
+  }
+
+  destroy() {
+    this.removeEventListeners();
+    this.containerElement.insertAdjacentElement('beforebegin', this.element);
+    this.containerElement.remove();
   }
 
 }
